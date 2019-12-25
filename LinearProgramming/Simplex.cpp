@@ -58,6 +58,8 @@ int Simplex::solve(Matrix &mat) {
     }
     if (optimal) {
         std::cout << "Optimal solution found!!!" << std::endl;
+    } else {
+        std::cout << "The problem is impossible!!" << std::endl;
     }
     return 0;
 }
@@ -65,8 +67,7 @@ int Simplex::solve(Matrix &mat) {
 int Simplex::primalSolver(Matrix &mat) {
     unsigned newIndexBasis = chooseVectorToInsertInBasis(mat, false);
     double thetaIndex = findPivotIndex(mat, newIndexBasis, false);
-    if (thetaIndex == 0) {
-        std::cout << "The problem is impossible!!" << std::endl;
+    if (thetaIndex == 0) { //Thetaindex should  be greater than 0
         return -1;
     }
     //std::cout << "New index basis: " << newIndexBasis << std::endl << "Theta index: " << thetaIndex << std::endl;
@@ -77,8 +78,7 @@ int Simplex::primalSolver(Matrix &mat) {
 int Simplex::dualSolver(Matrix &mat) {
     unsigned newIndexBasis = chooseVectorToInsertInBasis(mat, true);
     double thetaIndex = findPivotIndex(mat, newIndexBasis, true);
-    if (thetaIndex == 0) {
-        std::cout << "The problem is impossible!!" << std::endl;
+    if (thetaIndex == 0) { //Thetaindex should  be greater than 0
         return -1;
     }
     //std::cout << "New index basis: " << newIndexBasis << std::endl << "Theta index: " << thetaIndex << std::endl;
