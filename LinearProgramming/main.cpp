@@ -8,8 +8,16 @@
 
 #include <iostream>
 #include <vector>
+#include <math.h>
 #include "Matrix.hpp"
 #include "Simplex.hpp"
+#include "LIP.hpp"
+
+double isInteger(double val) {
+    double rounded = floor(val);
+    std::cout << rounded << std::endl;
+    return (val - rounded);
+}
 
 int main(int argc, const char * argv[]) {
     // insert code here...
@@ -136,9 +144,33 @@ int main(int argc, const char * argv[]) {
         
     };
     
-    Matrix mat(m16);
+    std::vector<std::vector<double>> m18 {
+        {0, -2, -1, 0, 0},
+        {0,  3,  -2, 1, 0},
+        {6,  1,  2, 0, 1},
+        
+    };
+    
+    std::vector<std::vector<double>> m19 {
+        {0, -3, -2, 0, 0, 0},
+        {7,  2,  1, 1, 0, 0},
+        {8,  3,  2, 0, 1, 0},
+        {6,  1,  1, 0, 0, 1},
+    };
+    
+    std::vector<std::vector<double>> m20 {
+        {0, -4, -5, 0, 0, 0},
+        {8,  2,  2, 1, 0, 0},
+        {7,  1,  3, 0, 1, 0},
+        {5,  2,  1, 0, 0, 1},
+    };
+    
+    Matrix mat(m20);
     mat.visualize();
     Simplex simplex;
-    simplex.solve(mat);
+    //simplex.solve(mat);
+    LIP lip;
+    lip.solve(mat);
+    
     return 0;
 }

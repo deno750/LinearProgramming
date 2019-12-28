@@ -57,6 +57,8 @@ public:
     
     std::vector<unsigned> findIdentityMatrixIndices(unsigned startRowIndex, unsigned startColumndIndex);
     void visualize();
+    //Increases matrix by 1. For example matrix (m,n) becomes a matrix (m+1, n+1)
+    void increaseMatrix();
     
     
 };

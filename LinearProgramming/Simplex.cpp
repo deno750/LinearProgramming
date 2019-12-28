@@ -58,10 +58,11 @@ int Simplex::solve(Matrix &mat) {
     }
     if (optimal) {
         std::cout << "Optimal solution found!!!" << std::endl;
+        return 0;
     } else {
         std::cout << "The problem is impossible!!" << std::endl;
+        return -1;
     }
-    return 0;
 }
 
 int Simplex::primalSolver(Matrix &mat) {

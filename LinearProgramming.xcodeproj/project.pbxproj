@@ -10,6 +10,7 @@
 		B2894DA0238086390088C7B7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2894D9F238086390088C7B7 /* main.cpp */; };
 		B2894DAB2380872E0088C7B7 /* Simplex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2894DA92380872E0088C7B7 /* Simplex.cpp */; };
 		B2894DB12380887B0088C7B7 /* Matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2894DAF2380887B0088C7B7 /* Matrix.cpp */; };
+		B28F7AB223B7B7D60088A8A4 /* LIP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B28F7AB023B7B7D60088A8A4 /* LIP.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +32,8 @@
 		B2894DAA2380872E0088C7B7 /* Simplex.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Simplex.hpp; sourceTree = "<group>"; };
 		B2894DAF2380887B0088C7B7 /* Matrix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix.cpp; sourceTree = "<group>"; };
 		B2894DB02380887B0088C7B7 /* Matrix.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Matrix.hpp; sourceTree = "<group>"; };
+		B28F7AB023B7B7D60088A8A4 /* LIP.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LIP.cpp; sourceTree = "<group>"; };
+		B28F7AB123B7B7D60088A8A4 /* LIP.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LIP.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +71,8 @@
 				B2894DAA2380872E0088C7B7 /* Simplex.hpp */,
 				B2894DAF2380887B0088C7B7 /* Matrix.cpp */,
 				B2894DB02380887B0088C7B7 /* Matrix.hpp */,
+				B28F7AB023B7B7D60088A8A4 /* LIP.cpp */,
+				B28F7AB123B7B7D60088A8A4 /* LIP.hpp */,
 			);
 			path = LinearProgramming;
 			sourceTree = "<group>";
@@ -130,6 +135,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2894DAB2380872E0088C7B7 /* Simplex.cpp in Sources */,
+				B28F7AB223B7B7D60088A8A4 /* LIP.cpp in Sources */,
 				B2894DA0238086390088C7B7 /* main.cpp in Sources */,
 				B2894DB12380887B0088C7B7 /* Matrix.cpp in Sources */,
 			);
