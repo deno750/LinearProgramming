@@ -165,9 +165,33 @@ int main(int argc, const char * argv[]) {
         {5,  2,  1, 0, 0, 1},
     };
     
-    Matrix mat(m20);
+    std::vector<std::vector<double>> m21 {
+        {0, -1,  -1, 0, 0},
+        {6,  3,  -2, 1, 0},
+        {2,  0,   1, 0, 1},
+    };
+    
+    std::vector<std::vector<double>> m22 {
+        {0,  -4,  -5, 0, 0},
+        {10,  3,   2, 1, 0},
+        {11,  1,   4, 0, 1},
+    };
+    
+    std::vector<std::vector<double>> m23 {
+        {0,  -5,  -2, 0, 0},
+        {9,   2,   2, 1, 0},
+        {11,  3,   1, 0, 1},
+    };
+    
+    std::vector<std::vector<double>> m24 {
+        { 0,  -1,   0, 0, 0},
+        { 1,   2,   2, 1, 0},
+        {-1,  -4,   1, 0, 1},
+    };
+    
+    Matrix mat(m24);
     mat.visualize();
-    Simplex simplex;
+    //Simplex simplex;
     //simplex.solve(mat);
     LIP lip;
     lip.solve(mat);

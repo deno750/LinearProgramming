@@ -35,15 +35,13 @@ int LIP::solve(Matrix &mat) {
             optimal = true;
         }
         mat.increaseMatrix();
-        //std::vector<double> gomoryCut;
+        //Solving with gomory cuts
         for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
             if (j == mat.getColumnsCount() - 1) {
                 mat[mat.getRowsCount() - 1][j] = 1.0;
             } else {
                 mat[mat.getRowsCount() - 1][j] = -calculateDecimal(mat[nonIntegerIndex][j]);
             }
-            
-            //gomoryCut.push_back();
         }
         
     }
