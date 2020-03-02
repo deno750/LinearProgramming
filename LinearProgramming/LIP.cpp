@@ -6,6 +6,7 @@
 //  Copyright © 2019 Denis Deronjic. All rights reserved.
 //
 
+#include <iostream>
 #include "LIP.hpp"
 #include "Simplex.hpp"
 
@@ -33,7 +34,9 @@ int LIP::solve(Matrix &mat) {
         }
         if (nonIntegerIndex == 0) {
             optimal = true;
+            return 0;
         }
+        std::cout << "The optimal solution is not integer." << std::endl;
         mat.increaseMatrix();
         //Solving with gomory cuts
         for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
@@ -43,6 +46,10 @@ int LIP::solve(Matrix &mat) {
                 mat[mat.getRowsCount() - 1][j] = -calculateDecimal(mat[nonIntegerIndex][j]);
             }
         }
+        
+        std::cout << std::endl;
+        std::cout << "Added gomory cut\n" << std::endl;
+        mat.visualize();
         
     }
     return 0;

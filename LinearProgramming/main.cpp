@@ -189,7 +189,38 @@ int main(int argc, const char * argv[]) {
         {-1,  -4,   1, 0, 1},
     };
     
-    Matrix mat(m24);
+    std::vector<std::vector<double>> m25 {
+        { -1,  2,  2, -1, -1, 0},
+        {  1,  1,  1,  0,  0, 1},
+        {  0, -1,  0,  1,  0, 0},
+        {  0,  0, -1,  0,  1, 0},
+    };
+    
+    std::vector<std::vector<double>> m26 {
+        {   4,  0,      0,  0,    1, 0,    1},
+        { 1/3,  0,  -13/3,  1,  4/3, 1, -2/3},
+        { 4/3,  1,    2/3,  0,  1/3, 0,  1/3},
+    };
+    
+    std::vector<std::vector<double>> m27 {
+        {   0, -5,  -4,  0,  0,  1},
+        {  78,  3,   5,  1,  0,  0},
+        {  36,  4,   1,  0,  1,  0},
+    };
+    
+    std::vector<std::vector<double>> m28 {
+        {   0, -5,  -2,  0,  0},
+        {   9,  2,   2,  1,  0},
+        {  11,  3,   1,  0,  1},
+    };
+    
+    std::vector<std::vector<double>> m29 {
+        {   0,  -3, -2,  0,  0},
+        {   3,  2, 3,  1,  0},
+        {   4,  3, 2,  0,  1},
+    };
+    
+    Matrix mat(m29);
     mat.visualize();
     //Simplex simplex;
     //simplex.solve(mat);
