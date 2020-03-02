@@ -11,6 +11,7 @@
 #include <vector>
 #include <iostream>
 #include <float.h>
+#include "Fraction.hpp"
 
 std::vector<unsigned> basisIndexes;
 
@@ -26,7 +27,8 @@ int Simplex::solve(Matrix &mat) {
         //Cheking for primal problem
         unsigned costsLessThan0 = 0;
         for (unsigned j = 1; j < mat.getColumnsCount(); ++j) {
-            if (mat[0][j] < 0) { //When this is not never true, the optimal solution is found!
+            Fraction reductedCost = mat[0][j];
+            if (reductedCost.getDoubleValue() < 0) { //When this is not never true, the optimal solution is found!
                 costsLessThan0++;
             }
         }
@@ -35,7 +37,8 @@ int Simplex::solve(Matrix &mat) {
             //Check for dual problem
             unsigned bLessThan0 = 0;
             for (unsigned j = 1; j < mat.getRowsCount(); ++j) {
-                if (mat[j][0] < 0) {
+                Fraction bVal = mat[j][0];
+                if (bVal.getDoubleValue() < 0) {
                     bLessThan0++;
                 }
             }
@@ -67,6 +70,9 @@ int Simplex::solve(Matrix &mat) {
 
 int Simplex::primalSolver(Matrix &mat) {
     unsigned newIndexBasis = chooseVectorToInsertInBasis(mat, false);
+    /*if (newIndexBasis == 0) {
+        return -1;
+    }*/
     double thetaIndex = findPivotIndex(mat, newIndexBasis, false);
     if (thetaIndex == 0) { //Thetaindex should  be greater than 0
         return -1;
@@ -78,6 +84,9 @@ int Simplex::primalSolver(Matrix &mat) {
 
 int Simplex::dualSolver(Matrix &mat) {
     unsigned newIndexBasis = chooseVectorToInsertInBasis(mat, true);
+    /*if (newIndexBasis == 0) {
+        return -1;
+    }*/
     double thetaIndex = findPivotIndex(mat, newIndexBasis, true);
     if (thetaIndex == 0) { //Thetaindex should  be greater than 0
         return -1;
@@ -94,13 +103,13 @@ void findBasis(Matrix &mat) {
 unsigned Simplex::chooseVectorToInsertInBasis(Matrix &mat, bool dual) {
     if (!dual) { //If primal
         for (unsigned j = 1; j < mat.getColumnsCount(); ++j) {
-            if (mat[0][j] < 0) {
+            if (mat[0][j].getDoubleValue() < 0) {
                 return j;
             }
         }
     } else { //If dual
         for (unsigned j = 1; j < mat.getRowsCount(); ++j) {
-            if (mat[j][0] < 0) {
+            if (mat[j][0].getDoubleValue() < 0) {
                 return j;
             }
         }
@@ -111,14 +120,15 @@ unsigned Simplex::chooseVectorToInsertInBasis(Matrix &mat, bool dual) {
 
 unsigned Simplex::findPivotIndex(Matrix &mat, unsigned basisIndex, bool dual) {
     if (!dual) { //if primal
-        double thetaMin = DBL_MAX;
+        Fraction thetaMin = Fraction::MAX_VALUE;
         unsigned rowIndexMin = 0;
         for (unsigned i = 1; i < mat.getRowsCount(); ++i) {
-            if (mat[i][basisIndex] <= 0) {
+            Fraction dividerForThetaCandidateCandidate = mat[i][basisIndex];
+            if (dividerForThetaCandidateCandidate.getDoubleValue() <= 0) {
                 continue;
             }
-            double thetaTmp = mat[i][0] / mat[i][basisIndex];
-            if (thetaTmp < thetaMin) {
+            Fraction thetaTmp = mat[i][0] / dividerForThetaCandidateCandidate;
+            if (thetaTmp.getDoubleValue() < thetaMin.getDoubleValue()) {
                 thetaMin = thetaTmp;
                 rowIndexMin = i;
             }
@@ -128,14 +138,15 @@ unsigned Simplex::findPivotIndex(Matrix &mat, unsigned basisIndex, bool dual) {
         }
         return rowIndexMin;
     } else { //If dual
-        double thetaMin = DBL_MAX;
+        Fraction thetaMin = Fraction::MAX_VALUE;
         unsigned columnIndexMin = 0;
         for (unsigned j = 1; j < mat.getColumnsCount(); ++j) {
-            if (mat[basisIndex][j] >= 0) {
+            Fraction dividerForThetaCandidateCandidate = mat[basisIndex][j];
+            if (dividerForThetaCandidateCandidate.getDoubleValue() >= 0) {
                 continue;
             }
-            double thetaTmp = -1.0 * (mat[0][j] / mat[basisIndex][j]);
-            if (thetaTmp < thetaMin) {
+            Fraction thetaTmp =  (mat[0][j] / dividerForThetaCandidateCandidate) * -1;
+            if (thetaTmp.getDoubleValue() < thetaMin.getDoubleValue()) {
                 thetaMin = thetaTmp;
                 columnIndexMin = j;
             }
@@ -151,41 +162,41 @@ unsigned Simplex::findPivotIndex(Matrix &mat, unsigned basisIndex, bool dual) {
 
 void Simplex::pivot(Matrix &mat, unsigned basisIndexPivot, unsigned basisIndexForNewBasis, bool dual) {
     if (!dual) { // If primal
-        double theta = mat[basisIndexPivot][basisIndexForNewBasis];
+        Fraction theta = mat[basisIndexPivot][basisIndexForNewBasis];
         //std::cout << "Theta: " << theta << std::endl;
-        double mulForCosts = mat[0][basisIndexForNewBasis];
+        Fraction mulForCosts = mat[0][basisIndexForNewBasis];
         for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
-            mat[basisIndexPivot][j] /= theta;
-            double costsRes = mulForCosts * mat[basisIndexPivot][j];
+            mat[basisIndexPivot][j] = mat[basisIndexPivot][j] / theta;
+            Fraction costsRes = mulForCosts * mat[basisIndexPivot][j];
             mat[0][j] = mat[0][j] - costsRes;
         }
         for (unsigned i = 1; i < mat.getRowsCount(); ++i) {
             if (i == basisIndexPivot) {
                 continue;
             }
-            double mul = mat[i][basisIndexForNewBasis];
+            Fraction mul = mat[i][basisIndexForNewBasis];
             for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
-                double res = mul * mat[basisIndexPivot][j];
+                Fraction res = mul * mat[basisIndexPivot][j];
                 mat[i][j] = mat[i][j] - res;
                 
             }
         }
         mat.visualize();
     } else { //If dual
-        double theta = mat[basisIndexForNewBasis][basisIndexPivot];
-        double mulForCosts = mat[0][basisIndexPivot];
+        Fraction theta = mat[basisIndexForNewBasis][basisIndexPivot];
+        Fraction mulForCosts = mat[0][basisIndexPivot];
         for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
-            mat[basisIndexForNewBasis][j] /= theta;
-            double costsRes = mulForCosts * mat[basisIndexForNewBasis][j];
+            mat[basisIndexForNewBasis][j] = mat[basisIndexForNewBasis][j] / theta;
+            Fraction costsRes = mulForCosts * mat[basisIndexForNewBasis][j];
             mat[0][j] = mat[0][j] - costsRes;
         }
         for (unsigned i = 1; i < mat.getRowsCount(); ++i) {
             if (i == basisIndexForNewBasis) {
                 continue;
             }
-            double mul = mat[i][basisIndexPivot];
+            Fraction mul = mat[i][basisIndexPivot];
             for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
-                double res = mul * mat[basisIndexForNewBasis][j];
+                Fraction res = mul * mat[basisIndexForNewBasis][j];
                 mat[i][j] = mat[i][j] - res;
                 
             }

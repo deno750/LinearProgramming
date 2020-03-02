@@ -26,7 +26,7 @@ int LIP::solve(Matrix &mat) {
         //Find if there's one solution that is not integer
         unsigned nonIntegerIndex = 0;
         for (unsigned i = 1; i < mat.getRowsCount(); ++i) {
-            double b = mat[i][0];
+            Fraction b = mat[i][0];
             if (!isInteger(b)) {
                 nonIntegerIndex = i;
                 break;
@@ -41,9 +41,10 @@ int LIP::solve(Matrix &mat) {
         //Solving with gomory cuts
         for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
             if (j == mat.getColumnsCount() - 1) {
-                mat[mat.getRowsCount() - 1][j] = 1.0;
+                mat[mat.getRowsCount() - 1][j] = Fraction::ONE;
             } else {
-                mat[mat.getRowsCount() - 1][j] = -calculateDecimal(mat[nonIntegerIndex][j]);
+                Fraction decimal = calculateDecimal(mat[nonIntegerIndex][j]) * -1;
+                mat[mat.getRowsCount() - 1][j] = decimal;
             }
         }
         

@@ -10,6 +10,7 @@
 #include <iostream>
 #include <iomanip>
 #include <math.h>
+#include "Fraction.hpp"
 
 std::vector<unsigned> Matrix::findIdentityMatrixIndices(unsigned startRowIndex = 0, unsigned startColumndIndex = 0) {
     std::vector<unsigned> indexes;
@@ -45,10 +46,10 @@ void Matrix::visualize() {
             if(matrix[i][j] == -0) {
                 matrix[i][j] = 0;
             }
-            if (abs(matrix[i][j]) <= (std::numeric_limits<double>::epsilon() * 100.0)) {
+            /*if (abs(matrix[i][j]) <= (std::numeric_limits<double>::epsilon() * 100.0)) {
                 matrix[i][j] = 0;
-            }
-            std::cout << std::setw(11) << matrix[i][j];
+            }*/
+            std::cout << std::setw(11) << matrix[i][j].toString();
         }
         
         std::cout << std::endl;
@@ -58,10 +59,10 @@ void Matrix::visualize() {
 void Matrix::increaseMatrix() {
     
     for (unsigned i = 0; i < rows; ++i) {
-        matrix[i].push_back(0.0);
+        matrix[i].push_back(Fraction(0, 1));
     }
     columns += 1;
-    std::vector<double> vec(columns, 0.0);
+    std::vector<Fraction> vec(columns, Fraction(0, 1));
     matrix.push_back(vec);
     rows += 1;
 }

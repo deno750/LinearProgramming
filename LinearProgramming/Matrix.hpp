@@ -11,12 +11,13 @@
 
 #include <stdio.h>
 #include <vector>
+#include "Fraction.hpp"
 
 class Matrix {
 private:
     unsigned rows;
     unsigned columns;
-    std::vector<std::vector<double>> matrix;
+    std::vector<std::vector<Fraction>> matrix;
     
 public:
     int getRowsCount() {return rows;}
@@ -45,15 +46,24 @@ public:
                 }
             }
         }
-        this->matrix = m;
         this->rows = (unsigned) m.size();
         this->columns = (unsigned) m[0].size();
+        
+        for (unsigned i = 0; i < this->rows; ++i) {
+            std::vector<Fraction> row;
+            for (unsigned j = 0; j < this->columns; ++j) {
+                row.push_back(Fraction((float) m[i][j]));
+            }
+            this->matrix.push_back(row);
+        }
+        //this->matrix = m;
+        
     }
     ~Matrix() {
         matrix.clear();
     }
-    std::vector<double>& operator [] (unsigned i) { return matrix[i]; }
-    std::vector<double> operator [] (unsigned i) const { return matrix[i]; }
+    std::vector<Fraction>& operator [] (unsigned i) { return matrix[i]; }
+    std::vector<Fraction> operator [] (unsigned i) const { return matrix[i]; }
     
     std::vector<unsigned> findIdentityMatrixIndices(unsigned startRowIndex, unsigned startColumndIndex);
     void visualize();
