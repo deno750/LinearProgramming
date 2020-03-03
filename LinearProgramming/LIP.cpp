@@ -27,7 +27,7 @@ int LIP::solve(Matrix &mat) {
         unsigned nonIntegerIndex = 0;
         for (unsigned i = 1; i < mat.getRowsCount(); ++i) {
             Fraction b = mat[i][0];
-            if (!isInteger(b)) {
+            if (!b.isInteger()) {
                 nonIntegerIndex = i;
                 break;
             }

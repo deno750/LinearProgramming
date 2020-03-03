@@ -46,10 +46,13 @@ void Matrix::visualize() {
             if(matrix[i][j] == -0) {
                 matrix[i][j] = 0;
             }
-            /*if (abs(matrix[i][j]) <= (std::numeric_limits<double>::epsilon() * 100.0)) {
-                matrix[i][j] = 0;
-            }*/
             std::cout << std::setw(11) << matrix[i][j].toString();
+            if (j == 0) {
+                std::cout << "   | ";
+            }
+        }
+        if (i == 0) {
+            std::cout << std::endl;
         }
         
         std::cout << std::endl;

@@ -28,12 +28,11 @@ int Simplex::solve(Matrix &mat) {
         unsigned costsLessThan0 = 0;
         for (unsigned j = 1; j < mat.getColumnsCount(); ++j) {
             Fraction reductedCost = mat[0][j];
-            if (reductedCost.getDoubleValue() < 0) { //When this is not never true, the optimal solution is found!
+            if (reductedCost.getDoubleValue() < 0) { //When this is not never true, the optimal solution is found for primal!
                 costsLessThan0++;
             }
         }
-        //std::cout << "Costs less than zero: " << costsLessThan0 << std::endl;
-        if (costsLessThan0 == 0) {
+        if (costsLessThan0 == 0) { //If costs are all greater than 0, optimal for primal is found, but for doual it could not be optimal though.
             //Check for dual problem
             unsigned bLessThan0 = 0;
             for (unsigned j = 1; j < mat.getRowsCount(); ++j) {
@@ -42,18 +41,18 @@ int Simplex::solve(Matrix &mat) {
                     bLessThan0++;
                 }
             }
-            if (bLessThan0 == 0) {
+            if (bLessThan0 == 0) { //All b values are greater than 0. Optimal solution for dual is found. Also it is optimal for dual.
                 optimal = true;
             } else {
                 std::cout << "Solving with dual" << std::endl;
                 int res = dualSolver(mat);
-                if (res == -1) {
+                if (res == -1) { //Problem is impossible
                     break;
                 }
             }
         } else {
             std::cout << "Solving with primal" << std::endl;
-            int res = primalSolver(mat);
+            int res = primalSolver(mat); //Problem is impossible
             if (res == -1) {
                 break;
             }
@@ -70,11 +69,8 @@ int Simplex::solve(Matrix &mat) {
 
 int Simplex::primalSolver(Matrix &mat) {
     unsigned newIndexBasis = chooseVectorToInsertInBasis(mat, false);
-    /*if (newIndexBasis == 0) {
-        return -1;
-    }*/
     double thetaIndex = findPivotIndex(mat, newIndexBasis, false);
-    if (thetaIndex == 0) { //Thetaindex should  be greater than 0
+    if (thetaIndex == 0) { //Thetaindex should  be greater than 0, so the problem is impossible
         return -1;
     }
     //std::cout << "New index basis: " << newIndexBasis << std::endl << "Theta index: " << thetaIndex << std::endl;
@@ -84,11 +80,8 @@ int Simplex::primalSolver(Matrix &mat) {
 
 int Simplex::dualSolver(Matrix &mat) {
     unsigned newIndexBasis = chooseVectorToInsertInBasis(mat, true);
-    /*if (newIndexBasis == 0) {
-        return -1;
-    }*/
     double thetaIndex = findPivotIndex(mat, newIndexBasis, true);
-    if (thetaIndex == 0) { //Thetaindex should  be greater than 0
+    if (thetaIndex == 0) { //Thetaindex should  be greater than 0, so the problem is impossible
         return -1;
     }
     //std::cout << "New index basis: " << newIndexBasis << std::endl << "Theta index: " << thetaIndex << std::endl;

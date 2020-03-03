@@ -23,11 +23,28 @@ public:
 
     int solve(Matrix &mat);
 
-    //Temporary functions. These should be in tableu class
     unsigned chooseVectorToInsertInBasis(Matrix &mat, bool dual);
+    
+    /**
+     * Finds in the matrix the index where the pivot 
+     */
     unsigned findPivotIndex(Matrix &mat, unsigned basisIndex, bool dual);
+    
+    /**
+     * This function does the pivot operation.
+     * *
+     * - Param mat: The matrix tableu
+     * *
+     * - Param rowIndexPivot: The index of the row where the pivot is.
+     * *
+     * - Param columnIndexForNewBasis: The column index of the variable that enters in the new basis
+     * *
+     * -Param dual: If true the pivot operation is computed for the dual problem, otherwise it's computed for the primal problem
+     */
     void pivot(Matrix &mat, unsigned rowIndexPivot, unsigned columnIndexForNewBasis, bool dual);
+    
     int primalSolver(Matrix &mat);
+    
     int dualSolver(Matrix &mat);
 };
 

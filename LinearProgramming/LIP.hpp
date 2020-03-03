@@ -23,25 +23,8 @@ public:
     int solve(std::vector<double> c, Matrix &a, std::vector<double> b);
     
 private:
-    double epsilon = std::numeric_limits<double>::epsilon() * 100.0;
-    bool isInteger(Fraction val) {
-        /*double n = calculateDecimal(val) + epsilon > 1 ? calculateDecimal(floor(val)) : calculateDecimal(val);
-        //double nepsilon = n + epsilon;
-        if (n <= epsilon) {
-            return true;
-        }
-        return false;*/
-        
-        //return abs(n) <= 0.0001001;//std::numeric_limits<double>::epsilon();
-        //double decimal = calculateDecimal(val);
-        //return decimal == 0.0;
-        return val.isInteger();
-    }
-    
     Fraction calculateDecimal(Fraction val) {
         Fraction decimal = val - Fraction((int)floor(val.getDoubleValue()));
-        //decimal = decimal + epsilon < 1 ? decimal : 0.0; //Decimal becomes 1 when the value is 0.999999999
-        //return decimal <= epsilon ? 0.0 : decimal; //When the value is 0.000000000 something it's integer so is truncated
         return decimal;
     }
 };
