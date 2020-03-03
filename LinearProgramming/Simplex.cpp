@@ -44,14 +44,14 @@ int Simplex::solve(Matrix &mat) {
             if (bLessThan0 == 0) { //All b values are greater than 0. Optimal solution for dual is found. Also it is optimal for dual.
                 optimal = true;
             } else {
-                std::cout << "Solving with dual" << std::endl;
+                std::cout << "\nSolving with dual" << std::endl;
                 int res = dualSolver(mat);
                 if (res == -1) { //Problem is impossible
                     break;
                 }
             }
         } else {
-            std::cout << "Solving with primal" << std::endl;
+            std::cout << "\nSolving with primal" << std::endl;
             int res = primalSolver(mat); //Problem is impossible
             if (res == -1) {
                 break;
@@ -59,10 +59,10 @@ int Simplex::solve(Matrix &mat) {
         }
     }
     if (optimal) {
-        std::cout << "Optimal solution found!!!" << std::endl;
+        std::cout << "\nOptimal solution found!!!" << std::endl;
         return 0;
     } else {
-        std::cout << "The problem is impossible!!" << std::endl;
+        std::cout << "\nThe problem is impossible!!" << std::endl;
         return -1;
     }
 }
@@ -127,7 +127,7 @@ unsigned Simplex::findPivotIndex(Matrix &mat, unsigned basisIndex, bool dual) {
             }
         }
         if (rowIndexMin > 0) {
-            std::cout << "\nSelected the pivot " << mat[rowIndexMin][basisIndex] << " at (" << rowIndexMin << ", " << basisIndex << ")\n\n\n";
+            std::cout << "Selected the pivot " << mat[rowIndexMin][basisIndex] << " at (" << rowIndexMin << ", " << basisIndex << ")\n\n\n";
         }
         return rowIndexMin;
     } else { //If dual
@@ -145,7 +145,7 @@ unsigned Simplex::findPivotIndex(Matrix &mat, unsigned basisIndex, bool dual) {
             }
         }
         if (columnIndexMin > 0) {
-            std::cout << "\nSelected the pivot " << mat[basisIndex][columnIndexMin] << " at (" << basisIndex << ", " << columnIndexMin << ")\n\n\n";
+            std::cout << "Selected the pivot " << mat[basisIndex][columnIndexMin] << " at (" << basisIndex << ", " << columnIndexMin << ")\n\n\n";
         }
         
         return columnIndexMin;

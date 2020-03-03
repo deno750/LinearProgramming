@@ -48,12 +48,16 @@ int LIP::solve(Matrix &mat) {
             }
         }
         
-        std::cout << std::endl;
         std::cout << "Added gomory cut\n" << std::endl;
         mat.visualize();
         
     }
     return 0;
+}
+
+Fraction LIP::calculateDecimal(Fraction val) {
+    Fraction decimal = val - Fraction((int)floor(val.getDoubleValue()));
+    return decimal;
 }
 
 

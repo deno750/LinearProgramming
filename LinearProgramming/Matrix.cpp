@@ -12,6 +12,54 @@
 #include <math.h>
 #include "Fraction.hpp"
 
+Matrix::Matrix(): rows(0), columns(0) {}
+
+Matrix::Matrix(unsigned rows, unsigned columns) {
+    this->rows = rows;
+    this->columns = columns;
+    matrix.resize(rows);
+    for (int i = 0; i < rows; ++i) {
+        matrix[i].resize(columns);
+    }
+}
+
+Matrix::Matrix(Matrix &m) {
+    matrix = m.matrix;
+    rows = m.rows;
+    columns = m.columns;
+}
+
+Matrix::Matrix(const std::vector<std::vector<double>> &m) {
+    unsigned columnSize = 0;
+    if(m.size() > 0) {
+        columnSize = (unsigned) m[0].size();
+        for (int i = 0; i<m.size(); ++i) {
+            if (m[i].size() != columnSize) {
+                throw std::logic_error("The matrix must have all columns at the same size!!");
+            }
+        }
+    }
+    this->rows = (unsigned) m.size();
+    this->columns = (unsigned) m[0].size();
+    
+    for (unsigned i = 0; i < this->rows; ++i) {
+        std::vector<Fraction> row;
+        for (unsigned j = 0; j < this->columns; ++j) {
+            row.push_back(Fraction((float) m[i][j]));
+        }
+        this->matrix.push_back(row);
+    }
+    //this->matrix = m;
+    
+}
+
+Matrix::~Matrix() {
+    matrix.clear();
+}
+
+int Matrix::getRowsCount() {return rows;}
+int Matrix::getColumnsCount() {return columns;}
+
 std::vector<unsigned> Matrix::findIdentityMatrixIndices(unsigned startRowIndex = 0, unsigned startColumndIndex = 0) {
     std::vector<unsigned> indexes;
     unsigned i = 0; //Row index
@@ -69,3 +117,6 @@ void Matrix::increaseMatrix() {
     matrix.push_back(vec);
     rows += 1;
 }
+
+std::vector<Fraction>& Matrix::operator [] (unsigned i) { return matrix[i]; }
+std::vector<Fraction> Matrix::operator [] (unsigned i) const { return matrix[i]; }

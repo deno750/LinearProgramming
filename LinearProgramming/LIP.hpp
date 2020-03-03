@@ -23,9 +23,6 @@ public:
     int solve(std::vector<double> c, Matrix &a, std::vector<double> b);
     
 private:
-    Fraction calculateDecimal(Fraction val) {
-        Fraction decimal = val - Fraction((int)floor(val.getDoubleValue()));
-        return decimal;
-    }
+    Fraction calculateDecimal(Fraction val);
 };
 
