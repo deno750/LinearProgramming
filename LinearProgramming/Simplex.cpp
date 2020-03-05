@@ -68,24 +68,22 @@ int Simplex::solve(Matrix &mat) {
 }
 
 int Simplex::primalSolver(Matrix &mat) {
-    unsigned newIndexBasis = chooseVectorToInsertInBasis(mat, false);
-    double thetaIndex = findPivotIndex(mat, newIndexBasis, false);
-    if (thetaIndex == 0) { //Thetaindex should  be greater than 0, so the problem is impossible
+    unsigned pivotColumnIndex = primalFindPivotColumnIndex(mat);
+    double pivotRowIndex = primalFindPivotRowIndex(mat, pivotColumnIndex);
+    if (pivotRowIndex == 0) { //PivotRowindex should  be greater than 0, otherwise the problem is impossible
         return -1;
     }
-    //std::cout << "New index basis: " << newIndexBasis << std::endl << "Theta index: " << thetaIndex << std::endl;
-    pivot(mat, thetaIndex, newIndexBasis, false);
+    primalComputePivotOperation(mat, pivotRowIndex, pivotColumnIndex);
     return 0;
 }
 
 int Simplex::dualSolver(Matrix &mat) {
-    unsigned newIndexBasis = chooseVectorToInsertInBasis(mat, true);
-    double thetaIndex = findPivotIndex(mat, newIndexBasis, true);
-    if (thetaIndex == 0) { //Thetaindex should  be greater than 0, so the problem is impossible
+    unsigned pivotRowIndex = dualFindThetaRowIndex(mat);
+    double pivotColumnIndex = dualFindPivotColumnIndex(mat, pivotRowIndex); 
+    if (pivotColumnIndex == 0) { //pivotColumnIndex should  be greater than 0, otherwise so the problem is impossible
         return -1;
     }
-    //std::cout << "New index basis: " << newIndexBasis << std::endl << "Theta index: " << thetaIndex << std::endl;
-    pivot(mat, thetaIndex, newIndexBasis, true);
+    dualComputePivotOperation(mat, pivotRowIndex, pivotColumnIndex);
     return 0;
 }
 
@@ -93,108 +91,109 @@ void findBasis(Matrix &mat) {
     std::vector<unsigned> basis = mat.findIdentityMatrixIndices(1, 1);
 }
 
-unsigned Simplex::chooseVectorToInsertInBasis(Matrix &mat, bool dual) {
-    if (!dual) { //If primal
-        for (unsigned j = 1; j < mat.getColumnsCount(); ++j) {
-            if (mat[0][j].getDoubleValue() < 0) {
-                return j;
-            }
-        }
-    } else { //If dual
-        for (unsigned j = 1; j < mat.getRowsCount(); ++j) {
-            if (mat[j][0].getDoubleValue() < 0) {
-                return j;
-            }
+unsigned Simplex::primalFindPivotColumnIndex(Matrix &mat) {
+    for (unsigned j = 1; j < mat.getColumnsCount(); ++j) {
+        if (mat[0][j].getDoubleValue() < 0) { //Reducted cost < 0, so it should enter in basis.
+            return j; //Returns the index of the vector that enters in basis
         }
     }
-    
     return 0;
 }
 
-unsigned Simplex::findPivotIndex(Matrix &mat, unsigned basisIndex, bool dual) {
-    if (!dual) { //if primal
-        Fraction thetaMin = Fraction::MAX_VALUE;
-        unsigned rowIndexMin = 0;
-        for (unsigned i = 1; i < mat.getRowsCount(); ++i) {
-            Fraction dividerForThetaCandidateCandidate = mat[i][basisIndex];
-            if (dividerForThetaCandidateCandidate.getDoubleValue() <= 0) {
-                continue;
-            }
-            Fraction thetaTmp = mat[i][0] / dividerForThetaCandidateCandidate;
-            if (thetaTmp.getDoubleValue() < thetaMin.getDoubleValue()) {
-                thetaMin = thetaTmp;
-                rowIndexMin = i;
-            }
+unsigned Simplex::primalFindPivotRowIndex(Matrix &mat, unsigned pivotColumnIndex) {
+    Fraction thetaMin = Fraction::MAX_VALUE;
+    unsigned rowIndexMin = 0; //The row index where the minimum theta is located
+    for (unsigned i = 1; i < mat.getRowsCount(); ++i) {
+        Fraction thetaCandidateDivider = mat[i][pivotColumnIndex]; //The aij value of the A matrix that would be used to calculate the value of the theta.
+        if (thetaCandidateDivider.getDoubleValue() <= 0) { //In primal problem the aij value must be > 0
+            continue;
         }
-        if (rowIndexMin > 0) {
-            std::cout << "Selected the pivot " << mat[rowIndexMin][basisIndex] << " at (" << rowIndexMin << ", " << basisIndex << ")\n\n\n";
-        }
-        return rowIndexMin;
-    } else { //If dual
-        Fraction thetaMin = Fraction::MAX_VALUE;
-        unsigned columnIndexMin = 0;
-        for (unsigned j = 1; j < mat.getColumnsCount(); ++j) {
-            Fraction dividerForThetaCandidateCandidate = mat[basisIndex][j];
-            if (dividerForThetaCandidateCandidate.getDoubleValue() >= 0) {
-                continue;
-            }
-            Fraction thetaTmp =  (mat[0][j] / dividerForThetaCandidateCandidate) * -1;
-            if (thetaTmp.getDoubleValue() < thetaMin.getDoubleValue()) {
-                thetaMin = thetaTmp;
-                columnIndexMin = j;
-            }
-        }
-        if (columnIndexMin > 0) {
-            std::cout << "Selected the pivot " << mat[basisIndex][columnIndexMin] << " at (" << basisIndex << ", " << columnIndexMin << ")\n\n\n";
-        }
+        Fraction thetaTmp = mat[i][0] / thetaCandidateDivider; //The theta candidate.
         
-        return columnIndexMin;
+        if (thetaTmp.getDoubleValue() < thetaMin.getDoubleValue()) { //Checking if the theta canditate is the minimum theta.
+            thetaMin = thetaTmp; //Updating the currently minimum theta
+            rowIndexMin = i; //Updating the row index of the minimum theta
+        }
     }
-    return -1;
+    if (rowIndexMin > 0) {
+        std::cout << "Selected the pivot " << mat[rowIndexMin][pivotColumnIndex] << " at (" << rowIndexMin << ", " << pivotColumnIndex << ")\n\n\n";
+    }
+    return rowIndexMin; //Returns the pivot's row index for the primal problem
 }
 
-void Simplex::pivot(Matrix &mat, unsigned basisIndexPivot, unsigned basisIndexForNewBasis, bool dual) {
-    if (!dual) { // If primal
-        Fraction theta = mat[basisIndexPivot][basisIndexForNewBasis];
-        //std::cout << "Theta: " << theta << std::endl;
-        Fraction mulForCosts = mat[0][basisIndexForNewBasis];
+void Simplex::primalComputePivotOperation(Matrix &mat, unsigned pivotRowIndex, unsigned pivotColumnIndex) {
+    Fraction pivot = mat[pivotRowIndex][pivotColumnIndex];
+    Fraction mulForCosts = mat[0][pivotColumnIndex]; //The value of the cost in the column of the vector to insert in basis in order to compute pivot operations to obtain the 0 cost for the column that enters in basis
+    for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
+        mat[pivotRowIndex][j] = mat[pivotRowIndex][j] / pivot; //Each column of the row indicated by pivotRowIndex is divided by the pivot
+        Fraction costsRes = mulForCosts * mat[pivotRowIndex][j]; //Result that is obtained by multypling mulForCosts in order to perform pivot operation in the costs row
+        mat[0][j] = mat[0][j] - costsRes; //Subtracting the cost by the value costRes, the result is always 0.
+    }
+    for (unsigned i = 1; i < mat.getRowsCount(); ++i) { //Doing the pivot operations for the other rows, in order to have the basis column vector i.e. 0,...0,1,0,...,0
+        if (i == pivotRowIndex) {
+            continue;
+        }
+        Fraction mul = mat[i][pivotColumnIndex]; //The value that is premoltiplicated to the pivot row in order to subtract the current row by the result
         for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
-            mat[basisIndexPivot][j] = mat[basisIndexPivot][j] / theta;
-            Fraction costsRes = mulForCosts * mat[basisIndexPivot][j];
-            mat[0][j] = mat[0][j] - costsRes;
+            Fraction res = mul * mat[pivotRowIndex][j]; //premoltipication operation
+            mat[i][j] = mat[i][j] - res; //The updated result is always 0
+            
         }
-        for (unsigned i = 1; i < mat.getRowsCount(); ++i) {
-            if (i == basisIndexPivot) {
-                continue;
-            }
-            Fraction mul = mat[i][basisIndexForNewBasis];
-            for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
-                Fraction res = mul * mat[basisIndexPivot][j];
-                mat[i][j] = mat[i][j] - res;
-                
-            }
+    }
+    //At the end of the operation, the vector with the column index "pivotColumnIndex" is in basis and has all values to 0 other than the value at 1 in the corresponding row index "pivotRowIndex"
+    mat.visualize();
+    
+}
+
+unsigned Simplex::dualFindThetaRowIndex(Matrix &mat) {
+    for (unsigned j = 1; j < mat.getRowsCount(); ++j) {
+        if (mat[j][0].getDoubleValue() < 0) { //B value is < 0, so it should exit from basis
+            return j; //Returns the index of the vector that exits the basis
         }
-        mat.visualize();
-    } else { //If dual
-        Fraction theta = mat[basisIndexForNewBasis][basisIndexPivot];
-        Fraction mulForCosts = mat[0][basisIndexPivot];
-        for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
-            mat[basisIndexForNewBasis][j] = mat[basisIndexForNewBasis][j] / theta;
-            Fraction costsRes = mulForCosts * mat[basisIndexForNewBasis][j];
-            mat[0][j] = mat[0][j] - costsRes;
+    }
+    return 0;
+}
+
+unsigned Simplex::dualFindPivotColumnIndex(Matrix &mat, unsigned pivotRowIndex) {
+    Fraction thetaMin = Fraction::MAX_VALUE;
+    unsigned columnIndexMin = 0; //The column index where the minimum theta is located
+    for (unsigned j = 1; j < mat.getColumnsCount(); ++j) {
+        Fraction thetaCandidateDivider = mat[pivotRowIndex][j]; //The aij value of the A matrix that would be used to calculate the value of the theta.
+        if (thetaCandidateDivider.getDoubleValue() >= 0) { //In dual problem the aij value must be < 0
+            continue;
         }
-        for (unsigned i = 1; i < mat.getRowsCount(); ++i) {
-            if (i == basisIndexForNewBasis) {
-                continue;
-            }
-            Fraction mul = mat[i][basisIndexPivot];
-            for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
-                Fraction res = mul * mat[basisIndexForNewBasis][j];
-                mat[i][j] = mat[i][j] - res;
-                
-            }
+        Fraction thetaTmp =  (mat[0][j] / thetaCandidateDivider) * -1; //The theta candidate. Is multiplied with -1 in order to make it positive since theta is calculated as theta = cj / |aij|
+        if (thetaTmp.getDoubleValue() < thetaMin.getDoubleValue()) { //Checking if the theta canditate is the minimum theta.
+            thetaMin = thetaTmp; //Updating the currently minimum theta
+            columnIndexMin = j; //Updating the column index of the minimum theta
         }
-        mat.visualize();
+    }
+    if (columnIndexMin > 0) {
+        std::cout << "Selected the pivot " << mat[pivotRowIndex][columnIndexMin] << " at (" << pivotRowIndex << ", " << columnIndexMin << ")\n\n\n";
     }
     
+    return columnIndexMin; //Returns the pivot's column index for the dual problem
+}
+
+void Simplex::dualComputePivotOperation(Matrix &mat, unsigned pivotRowIndex, unsigned pivotColumnIndex) {
+    Fraction pivot = mat[pivotRowIndex][pivotColumnIndex];
+    Fraction mulForCosts = mat[0][pivotColumnIndex]; //The value of the cost in the column of the vector to insert in basis in order to compute pivot operations to obtain the 0 cost for the column that enters in basis
+    for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
+        mat[pivotRowIndex][j] = mat[pivotRowIndex][j] / pivot; //Each column of the row indicated by pivotRowIndex is divided by the pivot
+        Fraction costsRes = mulForCosts * mat[pivotRowIndex][j]; //Result that is obtained by multypling mulForCosts in order to perform pivot operation in the costs row
+        mat[0][j] = mat[0][j] - costsRes; //Subtracting the cost by the value costRes, the result is always 0.
+    }
+    for (unsigned i = 1; i < mat.getRowsCount(); ++i) { //Doing the pivot operations for the other rows, in order to have the basis column vector i.e. 0,...0,1,0,...,0
+        if (i == pivotRowIndex) {
+            continue;
+        }
+        Fraction mul = mat[i][pivotColumnIndex]; //The value that is premoltiplicated to the pivot row in order to subtract the current row by the result
+        for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
+            Fraction res = mul * mat[pivotRowIndex][j]; //premoltipication operation
+            mat[i][j] = mat[i][j] - res; //The updated result is always 0
+            
+        }
+    }
+    //At the end of the operation, the vector with the column index "pivotColumnIndex" is in basis and has all values to 0 other than the value at 1 in the corresponding row index "pivotRowIndex"
+    mat.visualize();
 }

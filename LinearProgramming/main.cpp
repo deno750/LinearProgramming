@@ -209,6 +209,21 @@ int main(int argc, const char * argv[]) {
         {  2,  2,   3,  -1,  0, 0, 0, 1},
     };
     
+    std::vector<std::vector<double>> m31 {
+        {  -10, 5,  -1,  0,  -10, 0, 0, 0},
+        {   8,  1,   4,  0,    1, 1, 0, 0},
+        {   6, -1,   3,  1,    0, 0, 0, 0},
+        {   1,  0,  -2,  0,    3, 0, 1, 0},
+        {   2,  3,   1,  0,   -2, 0, 0, 1},
+    };
+    
+    std::vector<std::vector<double>> m32 {
+        {  0, -2,  -1,  0,  0, 0},
+        {  4,  1,  -1,  1,  0, 0},
+        { 12,  3,  -1,  0,  1, 0},
+        { 12,  1,   1,  0,  0, 1},
+    };
+    
     Matrix mat(m17);
     mat.visualize();
     //Simplex simplex;
