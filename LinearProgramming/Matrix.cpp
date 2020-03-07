@@ -6,11 +6,12 @@
 //  Copyright © 2019 Denis Deronjic. All rights reserved.
 //
 
-#include "Matrix.hpp"
 #include <iostream>
 #include <iomanip>
 #include <math.h>
+
 #include "Fraction.hpp"
+#include "Matrix.hpp"
 
 Matrix::Matrix(): rows(0), columns(0) {}
 
@@ -60,32 +61,33 @@ Matrix::~Matrix() {
 int Matrix::getRowsCount() {return rows;}
 int Matrix::getColumnsCount() {return columns;}
 
-std::vector<unsigned> Matrix::findIdentityMatrixIndices(unsigned startRowIndex = 0, unsigned startColumndIndex = 0) {
-    std::vector<unsigned> indexes;
-    unsigned i = 0; //Row index
-    for (unsigned j = startColumndIndex; j < this->columns; ++j) {
+std::unordered_map<unsigned, unsigned> Matrix::findBasis() {
+    std::unordered_map<unsigned, unsigned> map;
+    for (unsigned j = 0; j < this->columns; ++j) {
         unsigned count1 = 0;
-        if (matrix[i][j] == 0.0) {
-            for (unsigned k = i + 1; k < this->rows; ++k) {
+        unsigned rowIndex = 0;
+        if (matrix[0][j] == 0.0) {
+            for (unsigned k = 1; k < this->rows; ++k) {
                 if (matrix[k][j] == 1.0) {
                     count1++;
+                    rowIndex = k;
                 } else if (matrix[k][j] == 0.0){
                     //Do nothing it's ok
                 } else {
                     break;
                 }
             }
-        } else if (matrix[i][j] == 1.0) {
-            count1++;
         } else {
             continue;
         }
         if (count1 == 1) {
-            indexes.push_back(j);
+            if (map[rowIndex] == 0) {
+                map[rowIndex] = j;
+            }
         }
         
     }
-    return indexes;
+    return map;
 }
 
 void Matrix::visualize() {
@@ -109,13 +111,31 @@ void Matrix::visualize() {
 
 void Matrix::increaseMatrix() {
     
-    for (unsigned i = 0; i < rows; ++i) {
-        matrix[i].push_back(Fraction(0, 1));
+    for (unsigned i = 0; i < rows; ++i) { //Adding new column
+        matrix[i].push_back(Fraction::ZERO);
     }
     columns += 1;
-    std::vector<Fraction> vec(columns, Fraction(0, 1));
-    matrix.push_back(vec);
+    std::vector<Fraction> vec(columns, Fraction::ZERO);
+    matrix.push_back(vec); //Adding new row
     rows += 1;
+}
+
+void Matrix::addColumns(unsigned numberOfColumns) {
+    for (unsigned i = 0; i < rows; ++i) {
+        for (unsigned j = 0; j < numberOfColumns; ++j) {
+            matrix[i].push_back(Fraction::ZERO);
+        }
+    }
+    columns += numberOfColumns;
+}
+
+void Matrix::removeColumns(unsigned numberOfColumns) {
+    for (unsigned i = 0; i < rows; ++i) {
+        for (unsigned j = columns - 1; j > columns - numberOfColumns; --j) {
+            matrix[i].pop_back();
+        }
+    }
+    columns -= numberOfColumns;
 }
 
 std::vector<Fraction>& Matrix::operator [] (unsigned i) { return matrix[i]; }

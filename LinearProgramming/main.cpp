@@ -9,6 +9,7 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
+#include <unordered_map>
 #include "Matrix.hpp"
 #include "Simplex.hpp"
 #include "LIP.hpp"
@@ -224,12 +225,59 @@ int main(int argc, const char * argv[]) {
         { 12,  1,   1,  0,  0, 1},
     };
     
-    Matrix mat(m17);
+    std::vector<std::vector<double>> m33 {
+        {  0, -6,  -8},
+        { 36,  2,   4},
+        { 40,  3,  -4},
+    };
+    
+    std::vector<std::vector<double>> m34 {
+        {  0,  1,   0, 1, 0},
+        {  5,  1,   2, 0, 1},
+        {  6,  0,   1, 2, 0},
+    };
+    
+    std::vector<std::vector<double>> m35 {
+        {  0,  1,   0, 1, 0},
+        {  5, -1,  -2, 0,-1},
+        {  6,  0,   1, 2, 0},
+    };
+    
+    //9-4
+    std::vector<std::vector<double>> m36 {
+        {  0,  1,  -2, 0},
+        {  1,  2,   0, 3},
+        {  5,  3,   2,-1},
+    };
+    
+    //9-5
+    std::vector<std::vector<double>> m37 {
+        {  0,  1,  1, 2,  4},
+        {  1,  0,  2, 0, -3},
+        {  0,  1,  0, 0, -1},
+        {  1, -1,  0, 1,  0},
+    };
+    
+    //9-7
+    std::vector<std::vector<double>> m38 {
+        {  0,  1, -2,  0},
+        {  1,  2,  1, -3},
+        {  5,  3,  2, -1},
+    };
+    
+    std::vector<std::vector<double>> m39 {
+        {  0,  1,  1, 10},
+        {  2,  0,  1,  4},
+        {  2, -2,  1, -6},
+    };
+    
+    Matrix mat(m38);
     mat.visualize();
-    //Simplex simplex;
+    Simplex simplex;
     //simplex.solve(mat);
     LIP lip;
     lip.solve(mat);
+    
     
     return 0;
 }

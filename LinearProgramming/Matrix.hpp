@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <vector>
+#include <unordered_map>
 #include "Fraction.hpp"
 
 class Matrix {
@@ -33,12 +34,14 @@ public:
     std::vector<Fraction>& operator [] (unsigned i);
     std::vector<Fraction> operator [] (unsigned i) const;
     
-    std::vector<unsigned> findIdentityMatrixIndices(unsigned startRowIndex, unsigned startColumndIndex);
+    std::unordered_map<unsigned, unsigned> findBasis();
     int getRowsCount();
     int getColumnsCount();
     void visualize();
     //Increases matrix by 1. For example matrix (m,n) becomes a matrix (m+1, n+1)
     void increaseMatrix();
+    void addColumns(unsigned numberOfColumns);
+    void removeColumns(unsigned numberOfColumns);
     
     
 };

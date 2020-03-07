@@ -13,7 +13,16 @@
 #include <float.h>
 #include "Fraction.hpp"
 
-std::vector<unsigned> basisIndexes;
+std::unordered_map<unsigned, unsigned> basisIndexes; //The key is the row index and the value is the column index. Example {1: 3} indicates that in the 1st row the basis vector is x3 where 3 is the index of the vector in basis.
+
+bool appliesTwoPhasisMethod = false;
+
+void printVectorInBasis(Matrix &mat) {
+    std::cout << "Vector in basis are:" << std::endl;
+    for (unsigned i = 1; i < mat.getRowsCount(); ++i) {
+        std::cout << "x" << basisIndexes[i] << std::endl;
+    }
+}
 
 int Simplex::solve(std::vector<double> c, Matrix &a, std::vector<double> b) {
     return 0;
@@ -22,8 +31,53 @@ int Simplex::solve(std::vector<double> c, Matrix &a, std::vector<double> b) {
 int Simplex::solve(Matrix &mat) {
     
     bool optimal = false;
-    
+    basisIndexes = mat.findBasis(); //Initializes map that stores the basis
+    std::vector<Fraction> costs = mat[0]; //Stores the costs in order to easly retrive it after the 1st phasis in the 2 phasis method
     while (!optimal) {
+        //Checking for an initial basis
+        unsigned sizeOfBasis = mat.getRowsCount() - 1;
+        bool hasInitialBasis = basisIndexes.size() == sizeOfBasis;
+        if (!hasInitialBasis) {
+            //Uses 2 phases method
+            std::cout << "\nAppling 2 phasis method\nStarting the 1st phase" << std::endl;
+            appliesTwoPhasisMethod = true;
+            mat.addColumns(sizeOfBasis);
+            
+            unsigned artificialStartIndex = mat.getColumnsCount() - mat.getRowsCount();
+            for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
+                if (j <= artificialStartIndex) {
+                    mat[0][j] = Fraction::ZERO;
+                } else {
+                    mat[0][j] = Fraction::ONE;
+                }
+            }
+            
+            std::cout << "\nAdding " << sizeOfBasis << " artificial variables\n" << std::endl;
+            
+            for (unsigned i = 1; i < mat.getRowsCount(); ++i) {
+                for (unsigned j = artificialStartIndex + 1; j < mat.getColumnsCount(); ++j) {
+                    //std::cout << "i: " << i << " j: " << j - artificialStartIndex + 1 << std::endl;
+                    if ((j - artificialStartIndex) == i) {
+                        mat[i][j] = Fraction::ONE;
+                        basisIndexes[i] = j;
+                    } else {
+                        mat[i][j] = Fraction::ZERO;
+                    }
+                }
+            }
+            mat.visualize();
+            std::cout << "\nSubtracting the costs to insert the artificial variables in basis\n" << std::endl;;
+            for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
+                for (unsigned i = 1; i < mat.getRowsCount(); ++i) {
+                    mat[0][j] = mat[0][j] - mat[i][j];
+                }
+            }
+            
+            mat.visualize();
+            std::cout << std::endl;
+            
+        }
+        
         //Cheking for primal problem
         unsigned costsLessThan0 = 0;
         for (unsigned j = 1; j < mat.getColumnsCount(); ++j) {
@@ -42,7 +96,83 @@ int Simplex::solve(Matrix &mat) {
                 }
             }
             if (bLessThan0 == 0) { //All b values are greater than 0. Optimal solution for dual is found. Also it is optimal for dual.
-                optimal = true;
+                if (appliesTwoPhasisMethod) {
+                    appliesTwoPhasisMethod = false;
+                    if (mat[0][0].getDoubleValue() == 0) {
+                        //Check artificial variables level 0.
+                        
+                        for (unsigned i = 1; i < mat.getRowsCount(); ++i) {
+                            if (basisIndexes[i] > mat.getColumnsCount() - mat.getRowsCount()) { //Checking if an artificial variable is still in basis
+                                
+                                //Find the pivot
+                                Fraction pivot;
+                                Fraction mulForCosts;
+                                for (unsigned j = 1; j < mat.getColumnsCount(); ++j) {
+                                    if (mat[i][j].getDoubleValue() != 0 && j != basisIndexes[i]) {
+                                        pivot = mat[i][j];
+                                        mulForCosts = mat[0][j];
+                                        
+                                        std::cout << "The artificial variable with index " << basisIndexes[i] << " is still in basis.\nComputing the pivot operation.\nTaken pivot " << pivot.toString() << " at (" << i << ", " << j << ")\n" << std::endl;
+                                        
+                                        
+                                        basisIndexes[i] = j;
+                                        break;
+                                    }
+                                }
+                                
+                                
+                                
+                                //Computing pivot operation
+                                for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
+                                    Fraction frac = mat[i][j];
+                                    mat[i][j] = mat[i][j] / pivot;
+                                    frac = mat[i][j];
+                                    Fraction costsRes = mulForCosts * mat[i][j];
+                                    mat[0][j] = mat[0][j] - costsRes;
+                                }
+                                
+                                for (unsigned k = 0; k < mat.getRowsCount(); ++k) {
+                                    if (k == i) {
+                                        continue;
+                                    }
+                                    
+                                    Fraction mul = mat[k][basisIndexes[i]]; //The value that is premoltiplicated to the pivot row in order to subtract the current row by the result
+                                    for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
+                                        Fraction res = mul * mat[k][j]; //premoltipication operation
+                                        mat[k][j] = mat[k][j] - res; //The updated result is always 0
+                                        
+                                    }
+                                }
+                            }
+                        }
+                        
+                        
+                        
+                        mat.visualize();
+                        std::cout << "\nRemoving artifical variables" << std::endl;
+                        
+                        mat.removeColumns(mat.getRowsCount() - 1);
+                    } else {
+                        optimal = false;
+                        break;
+                    }
+                    mat[0] = costs;
+                    std::cout << "Adding the original costs value\n" << std::endl;
+                    mat.visualize();
+                    for (unsigned i = 1; i < mat.getRowsCount(); ++i) {
+                        unsigned basisIndex = basisIndexes[i];
+                        Fraction mulForCosts = mat[0][basisIndex];
+                        for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
+                            Fraction costsRes = mulForCosts * mat[i][j];
+                            mat[0][j] = mat[0][j] - costsRes;
+                        }
+                    }
+                    std::cout << "\nSubtracting the costs to insert the vectors in basis and terminate the phase 1\n" << std::endl;
+                    mat.visualize();
+                    std::cout << "\nPhase 1 terminated\n" << std::endl;
+                } else {
+                    optimal = true;
+                }
             } else {
                 std::cout << "\nSolving with dual" << std::endl;
                 int res = dualSolver(mat);
@@ -58,8 +188,13 @@ int Simplex::solve(Matrix &mat) {
             }
         }
     }
+    
     if (optimal) {
         std::cout << "\nOptimal solution found!!!" << std::endl;
+        std::cout << "The result is:" << std::endl;
+        for (unsigned i = 1; i < mat.getRowsCount(); ++i) {
+            cout << "x" << basisIndexes[i] << "=" << mat[i][0] << std::endl;
+        }
         return 0;
     } else {
         std::cout << "\nThe problem is impossible!!" << std::endl;
@@ -74,6 +209,8 @@ int Simplex::primalSolver(Matrix &mat) {
         return -1;
     }
     primalComputePivotOperation(mat, pivotRowIndex, pivotColumnIndex);
+    basisIndexes[pivotRowIndex] = pivotColumnIndex;
+    printVectorInBasis(mat);
     return 0;
 }
 
@@ -84,11 +221,9 @@ int Simplex::dualSolver(Matrix &mat) {
         return -1;
     }
     dualComputePivotOperation(mat, pivotRowIndex, pivotColumnIndex);
+    basisIndexes[pivotRowIndex] = pivotColumnIndex;
+    printVectorInBasis(mat);
     return 0;
-}
-
-void findBasis(Matrix &mat) {
-    std::vector<unsigned> basis = mat.findIdentityMatrixIndices(1, 1);
 }
 
 unsigned Simplex::primalFindPivotColumnIndex(Matrix &mat) {
