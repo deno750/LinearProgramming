@@ -19,6 +19,7 @@ private:
     unsigned rows;
     unsigned columns;
     std::vector<std::vector<Fraction>> matrix;
+    std::unordered_map<unsigned, unsigned> basisIndexes; //The key is the row index and the value is the column index. Example {1: 3} indicates that in the 1st row the basis vector is x3 where 3 is the index of the vector in basis.
     
 public:
     //Constructors
@@ -42,7 +43,9 @@ public:
     void increaseMatrix();
     void addColumns(unsigned numberOfColumns);
     void removeColumns(unsigned numberOfColumns);
-    
+    void insertInBasis(unsigned rowIndex, unsigned indexOfVectorToInsert);
+    unsigned getBasisIndexAtRow(unsigned rowIndex);
+    unsigned basisSize();
     
 };
 

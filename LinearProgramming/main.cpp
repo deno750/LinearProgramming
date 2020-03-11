@@ -14,12 +14,6 @@
 #include "Simplex.hpp"
 #include "LIP.hpp"
 
-double isInteger(double val) {
-    double rounded = floor(val);
-    std::cout << rounded << std::endl;
-    return (val - rounded);
-}
-
 int main(int argc, const char * argv[]) {
     // insert code here...
     std::vector<std::vector<double>> m {
@@ -271,12 +265,20 @@ int main(int argc, const char * argv[]) {
         {  2, -2,  1, -6},
     };
     
-    Matrix mat(m38);
+    std::vector<std::vector<double>> m40 {
+        {  -5,  0,   6,  0,   10, 0,  5, 0},
+        { -10,  0,   8,  0,    3, 1,  7, 0},
+        {  -5,  0,  -1,  1,   -2, 0, -1, 0},
+        {   3,  1,  -1,  0,   -2, 0,  0, 0},
+        {  -1,  0,   3,  0,    6, 0, -2, 1},
+    };
+    
+    Matrix mat(m40);
     mat.visualize();
     Simplex simplex;
-    //simplex.solve(mat);
+    simplex.solve(mat);
     LIP lip;
-    lip.solve(mat);
+    //lip.solve(mat);
     
     
     return 0;

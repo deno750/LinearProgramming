@@ -22,12 +22,14 @@ Matrix::Matrix(unsigned rows, unsigned columns) {
     for (int i = 0; i < rows; ++i) {
         matrix[i].resize(columns);
     }
+    basisIndexes = findBasis();
 }
 
 Matrix::Matrix(Matrix &m) {
     matrix = m.matrix;
     rows = m.rows;
     columns = m.columns;
+    basisIndexes = findBasis();
 }
 
 Matrix::Matrix(const std::vector<std::vector<double>> &m) {
@@ -51,7 +53,7 @@ Matrix::Matrix(const std::vector<std::vector<double>> &m) {
         this->matrix.push_back(row);
     }
     //this->matrix = m;
-    
+    basisIndexes = findBasis();
 }
 
 Matrix::~Matrix() {
@@ -113,6 +115,10 @@ void Matrix::increaseMatrix() {
     
     for (unsigned i = 0; i < rows; ++i) { //Adding new column
         matrix[i].push_back(Fraction::ZERO);
+        for (unsigned k = 0; k < columns + 1; ++k) {
+            std::cout << matrix[i][k].toString() << ",";
+        }
+        std::cout << std::endl;
     }
     columns += 1;
     std::vector<Fraction> vec(columns, Fraction::ZERO);
@@ -136,6 +142,18 @@ void Matrix::removeColumns(unsigned numberOfColumns) {
         }
     }
     columns -= numberOfColumns;
+}
+
+void Matrix::insertInBasis(unsigned rowIndex, unsigned indexOfVectorToInsert) {
+    basisIndexes[rowIndex] = indexOfVectorToInsert;
+}
+
+unsigned Matrix::getBasisIndexAtRow(unsigned rowIndex) {
+    return basisIndexes[rowIndex];
+}
+
+unsigned Matrix::basisSize() {
+    return basisIndexes.size();
 }
 
 std::vector<Fraction>& Matrix::operator [] (unsigned i) { return matrix[i]; }

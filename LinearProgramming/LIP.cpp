@@ -42,6 +42,7 @@ int LIP::solve(Matrix &mat) {
         for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
             if (j == mat.getColumnsCount() - 1) {
                 mat[mat.getRowsCount() - 1][j] = Fraction::ONE;
+                mat.insertInBasis(mat.getRowsCount() - 1, j);
             } else {
                 Fraction decimal = calculateDecimal(mat[nonIntegerIndex][j]) * -1;
                 mat[mat.getRowsCount() - 1][j] = decimal;
