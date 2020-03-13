@@ -115,10 +115,6 @@ void Matrix::increaseMatrix() {
     
     for (unsigned i = 0; i < rows; ++i) { //Adding new column
         matrix[i].push_back(Fraction::ZERO);
-        for (unsigned k = 0; k < columns + 1; ++k) {
-            std::cout << matrix[i][k].toString() << ",";
-        }
-        std::cout << std::endl;
     }
     columns += 1;
     std::vector<Fraction> vec(columns, Fraction::ZERO);
@@ -153,7 +149,7 @@ unsigned Matrix::getBasisIndexAtRow(unsigned rowIndex) {
 }
 
 unsigned Matrix::basisSize() {
-    return basisIndexes.size();
+    return (unsigned) basisIndexes.size();
 }
 
 std::vector<Fraction>& Matrix::operator [] (unsigned i) { return matrix[i]; }

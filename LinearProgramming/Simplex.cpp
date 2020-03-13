@@ -18,7 +18,19 @@ bool appliesTwoPhasisMethod = false;
 void printVectorInBasis(Matrix &mat) {
     std::cout << "Vectors in basis are: ";
     for (unsigned i = 1; i < mat.getRowsCount(); ++i) {
-        std::cout << "x" << mat.getBasisIndexAtRow(i);
+        if (appliesTwoPhasisMethod) {
+            unsigned normalVariablesLastIndex = mat.getColumnsCount() - mat.getRowsCount();
+            unsigned vectorInBasisIndex = mat.getBasisIndexAtRow(i);
+            
+            if (vectorInBasisIndex <= normalVariablesLastIndex) {
+               std::cout << "x" << vectorInBasisIndex;
+            } else {
+                std::cout << "y" << vectorInBasisIndex - normalVariablesLastIndex;
+            }
+        } else {
+             std::cout << "x" << mat.getBasisIndexAtRow(i);
+        }
+        
         if (i == mat.getRowsCount() - 1) {
             std::cout << std::endl;
         } else {
@@ -78,6 +90,7 @@ int Simplex::solve(Matrix &mat) {
             }
             
             mat.visualize();
+            printVectorInBasis(mat);
             std::cout << std::endl;
             
         }
@@ -154,6 +167,7 @@ int Simplex::solve(Matrix &mat) {
                         
                         
                         mat.visualize();
+                        printVectorInBasis(mat);
                         std::cout << "\nRemoving artifical variables" << std::endl;
                         
                         mat.removeColumns(mat.getRowsCount() - 1);
@@ -174,6 +188,7 @@ int Simplex::solve(Matrix &mat) {
                     }
                     std::cout << "\nSubtracting the costs to insert the vectors in basis and terminate the phase 1\n" << std::endl;
                     mat.visualize();
+                    printVectorInBasis(mat);
                     std::cout << "\nPhase 1 terminated\n" << std::endl;
                 } else {
                     optimal = true;
@@ -263,6 +278,7 @@ unsigned Simplex::primalFindPivotRowIndex(Matrix &mat, unsigned pivotColumnIndex
             }
             thetaMin = thetaTmp; //Updating the currently minimum theta
             rowIndexMin = i; //Updating the row index of the minimum theta
+            vectorInBasisIndexMin = mat.getBasisIndexAtRow(i);
         }
     }
     if (rowIndexMin > 0) {

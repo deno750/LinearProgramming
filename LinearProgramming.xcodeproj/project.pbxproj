@@ -110,7 +110,7 @@
 		B2894D94238086380088C7B7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1120;
+				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "Denis Deronjic";
 				TargetAttributes = {
 					B2894D9B238086380088C7B7 = {
@@ -264,6 +264,7 @@
 		B2894DA4238086390088C7B7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QMA99QRW5T;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -274,6 +275,7 @@
 		B2894DA5238086390088C7B7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QMA99QRW5T;
 				ENABLE_HARDENED_RUNTIME = YES;

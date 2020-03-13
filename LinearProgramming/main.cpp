@@ -273,11 +273,25 @@ int main(int argc, const char * argv[]) {
         {  -1,  0,   3,  0,    6, 0, -2, 1},
     };
     
-    Matrix mat(m40);
+    std::vector<std::vector<double>> m41 {
+        {    0,  -3,  -5,  0, 0},
+        {  800,   1,   2,  1, 0},
+        {  600,   1,   1,  0, 1},
+    };
+    
+    std::vector<std::vector<double>> m42 {
+        {    0,   0,  -1,  0, 0, 0, 0},
+        {    6,   3,   2,  1, 0, 0, 0},
+        {    0,  -3,   2,  0, 1, 0, 0},
+        {    2,   1,   1,  0, 0, 1, 0},
+        {    0,  -1,   1,  0, 0, 0, 1},
+    };
+    
+    Matrix mat(m39);
     mat.visualize();
     Simplex simplex;
     simplex.solve(mat);
-    LIP lip;
+    //LIP lip;
     //lip.solve(mat);
     
     
