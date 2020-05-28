@@ -36,5 +36,9 @@ private:
      * -Returns the calculated decimal Fraction
      */
     Fraction calculateDecimal(Fraction val);
+    
+    void solveWithGomoryCuts(Matrix &mat, unsigned nonIntegerIndex);
+    
+    void solveWithBranchAndBound(Matrix &mat, unsigned nonIntegerIndex);
 };
 

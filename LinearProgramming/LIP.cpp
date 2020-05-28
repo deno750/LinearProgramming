@@ -36,21 +36,9 @@ int LIP::solve(Matrix &mat) {
             optimal = true;
             return 0;
         }
-        std::cout << "The optimal solution is not integer." << std::endl;
-        mat.increaseMatrix();
-        //Solving with gomory cuts
-        for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
-            if (j == mat.getColumnsCount() - 1) {
-                mat[mat.getRowsCount() - 1][j] = Fraction::ONE;
-                mat.insertInBasis(mat.getRowsCount() - 1, j);
-            } else {
-                Fraction decimal = calculateDecimal(mat[nonIntegerIndex][j]) * -1;
-                mat[mat.getRowsCount() - 1][j] = decimal;
-            }
-        }
         
-        std::cout << "Added gomory cut\n" << std::endl;
-        mat.visualize();
+        std::cout << "The optimal solution is not integer." << std::endl;
+        solveWithGomoryCuts(mat, nonIntegerIndex);
         
     }
     return 0;
@@ -59,6 +47,27 @@ int LIP::solve(Matrix &mat) {
 Fraction LIP::calculateDecimal(Fraction val) {
     Fraction decimal = val - Fraction((int)floor(val.getDoubleValue()));
     return decimal;
+}
+
+void LIP::solveWithGomoryCuts(Matrix &mat, unsigned nonIntegerIndex) {
+    mat.increaseMatrix();
+    //Solving with gomory cuts
+    for (unsigned j = 0; j < mat.getColumnsCount(); ++j) {
+        if (j == mat.getColumnsCount() - 1) {
+            mat[mat.getRowsCount() - 1][j] = Fraction::ONE;
+            mat.insertInBasis(mat.getRowsCount() - 1, j);
+        } else {
+            Fraction decimal = calculateDecimal(mat[nonIntegerIndex][j]) * -1;
+            mat[mat.getRowsCount() - 1][j] = decimal;
+        }
+    }
+    
+    std::cout << "Added gomory cut\n" << std::endl;
+    mat.visualize();
+}
+
+void LIP::solveWithBranchAndBound(Matrix &mat, unsigned nonIntegerIndex) {
+    
 }
 
 
