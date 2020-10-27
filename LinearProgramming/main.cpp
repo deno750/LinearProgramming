@@ -332,12 +332,27 @@ int main(int argc, const char * argv[]) {
         {    3,    1,  -3,  0, 0, 1},
     };
     
-    Matrix mat(m45);
+    std::vector<std::vector<double>> m48 {
+        {    0,    1,   2,  0, 0, 0},
+        {    4,    1,   1,  1, 0, 0},
+        {   -6,    -1, -4,  0, 1, 0},
+        {   -3,   -8,   8,  0, 0, 1},
+    };
+    
+    std::vector<std::vector<double>> m49 {
+        {    0,   -3,  -5,  0, 0, 0},
+        {    2,    7,  -3,  1, 0, 0},
+        {    1,   -1,   1,  0, 1, 0},
+        {    3,    1,  -3,  0, 0, 1},
+    };
+    
+    Matrix mat(m48);
     mat.visualize();
     //Simplex simplex;
     //simplex.solve(mat);
     LIP lip;
-    lip.solve(mat);
+    bool useBranchAndBound = true;
+    lip.solve(mat, useBranchAndBound);
     
     
     return 0;

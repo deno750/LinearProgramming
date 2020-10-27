@@ -24,7 +24,7 @@ public:
      *
      * -Param mat: The matrix tableu that defines the constraints and the costs for the problem. The algorithm works with standard form Ax = b.
      */
-    int solve(Matrix &mat);
+    int solve(Matrix &mat, bool useBranchAndBound);
     int solve(std::vector<double> c, Matrix &a, std::vector<double> b);
     
 private:
@@ -39,6 +39,6 @@ private:
     
     void solveWithGomoryCuts(Matrix &mat, unsigned nonIntegerIndex);
     
-    void solveWithBranchAndBound(Matrix &mat, unsigned nonIntegerIndex);
+    void solveWithBranchAndBound(Matrix &mat, unsigned nonIntegerIndex, unsigned currentNodeIndex);
 };
 
