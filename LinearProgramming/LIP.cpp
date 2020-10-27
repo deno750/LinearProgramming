@@ -133,7 +133,7 @@ void LIP::solveWithBranchAndBound(Matrix &mat, unsigned nonIntegerIndex, unsigne
             mat2[mat2.getRowsCount() - 1][j] = Fraction::ONE;
             mat2.insertInBasis(mat2.getRowsCount() - 1, j);
         } else {
-            if (j == mat.getBasisIndexAtRow(nonIntegerIndex)) { //Removing the current basis from basis
+            if (j == mat.getBasisIndexAtRow(nonIntegerIndex)) { //Removing the current vector in basis from basis
                 mat1[mat1.getRowsCount() -1][j] = Fraction::ZERO;
                 mat2[mat2.getRowsCount() -1][j] = Fraction::ZERO;
             } else { //Pivot operation
