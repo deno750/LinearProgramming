@@ -6,13 +6,11 @@
 //  Copyright © 2019 Denis Deronjic. All rights reserved.
 //
 
-#ifndef Simplex_hpp
-#define Simplex_hpp
+#ifndef Simplex_HPP
+#define Simplex_HPP
 
 #include <stdio.h>
 #include "Matrix.hpp"
-
-#endif /* Simplex_hpp */
 
 /**
  * - param c: Vector of costs
@@ -106,4 +104,6 @@ public:
      */
     void dualComputePivotOperation(Matrix &mat, unsigned pivotRowIndex, unsigned pivotColumnIndex);
 };
+
+#endif /* Simplex_hpp */
 

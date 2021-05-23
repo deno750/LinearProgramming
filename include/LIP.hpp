@@ -6,15 +6,13 @@
 //  Copyright © 2019 Denis Deronjic. All rights reserved.
 //
 
-#ifndef LIP_hpp
-#define LIP_hpp
+#ifndef LIP_HPP
+#define LIP_HPP
 
 #include <stdio.h>
 #include <math.h>
 #include "Matrix.hpp"
 #include "Fraction.hpp"
-
-#endif /* LIP_hpp */
 
 //Includes functions for Linear Integer Programming
 class LIP {
@@ -41,4 +39,6 @@ private:
     
     void solveWithBranchAndBound(Matrix &mat, unsigned nonIntegerIndex, unsigned currentNodeIndex);
 };
+
+#endif /* LIP_hpp */
 

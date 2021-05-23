@@ -6,8 +6,8 @@
 //  Copyright © 2019 Denis Deronjic. All rights reserved.
 //
 
-#ifndef Matrix_hpp
-#define Matrix_hpp
+#ifndef Matrix_HPP
+#define Matrix_HPP
 
 #include <stdio.h>
 #include <vector>

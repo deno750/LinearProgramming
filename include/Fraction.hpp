@@ -1,7 +1,7 @@
 //Source code taken from: https://github.com/talyssonoc/Fraction
 
-#ifndef FRACTION_H
-#define FRACTION_H
+#ifndef FRACTION_HPP
+#define FRACTION_HPP
 
 #include <iostream>
 #include <sstream>
