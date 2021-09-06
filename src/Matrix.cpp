@@ -48,7 +48,7 @@ Matrix::Matrix(const std::vector<std::vector<double>> &m) {
     for (unsigned i = 0; i < this->rows; ++i) {
         std::vector<Fraction> row;
         for (unsigned j = 0; j < this->columns; ++j) {
-            row.push_back(Fraction((float) m[i][j]));
+            row.push_back(Fraction((int) m[i][j]));
         }
         this->matrix.push_back(row);
     }
