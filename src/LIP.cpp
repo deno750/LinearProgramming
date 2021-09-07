@@ -146,9 +146,9 @@ void LIP::solveWithBranchAndBound(Matrix &mat, unsigned nonIntegerIndex, unsigne
     unsigned rightChildIndex = 2 * currentNodeIndex + 2;
     nodes[leftChildIndex].mat = mat1;
     nodes[rightChildIndex].mat = mat2;
-    cout << "left child" << endl;
+    cout << "\n\nleft child\n\n" << endl;
     mat1.visualize();
-    cout << "right child" << endl;
+    cout << "\n\nright child\n\n" << endl;
     mat2.visualize();
 }
 
