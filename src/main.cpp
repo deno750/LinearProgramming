@@ -13,13 +13,16 @@
 #include "Matrix.hpp"
 #include "Simplex.hpp"
 #include "LIP.hpp"
+#include "ModelParser.hpp"
 
 int main(int argc, const char * argv[]) {
     // insert code here...
     std::vector<std::vector<double>> m {
-        { 0, -1, -1, 0, 0},
-        {24,  6,  4, 1, 0},
-        { 6,  3, -2, 0, 1}
+        { 0, -15, -25, 0, 0, 0, 0},
+        {1000, 1,   2, 1, 0, 0, 0},
+        {800,  1,   1, 0, 1, 0, 0},
+        {700,  1,   0, 0, 0, 1, 0},
+        {400,  0,   1, 0, 0, 0, 1},
     };
     std::vector<std::vector<double>> m2 {
         {-10,  5, -1, 0, -10, 0, 0, 0},
@@ -345,14 +348,23 @@ int main(int argc, const char * argv[]) {
         {    1,   -1,   1,  0, 1, 0},
         {    3,    1,  -3,  0, 0, 1},
     };
+
+    Matrix mat;
+    if (argc < 2) {
+        cout << "Missing file path" << endl;
+        return -1;
+    } else {
+        mat = parseFile(argv[1]);
+    }
     
-    Matrix mat(m48);
-    mat.visualize();
-    //Simplex simplex;
-    //simplex.solve(mat);
+    
+    //Matrix mat(m46);
+    //mat.visualize();
+    Simplex simplex;
+    simplex.solve(mat);
     LIP lip;
-    bool useBranchAndBound = true;
-    lip.solve(mat, useBranchAndBound);
+    bool useBranchAndBound = false;
+    //lip.solve(mat, useBranchAndBound);
     
     
     return 0;

@@ -36,12 +36,14 @@ public:
     std::vector<Fraction> operator [] (unsigned i) const;
     
     std::unordered_map<unsigned, unsigned> findBasis();
+    void updateBasis();
     int getRowsCount();
     int getColumnsCount();
     void visualize();
     //Increases matrix by 1. For example matrix (m,n) becomes a matrix (m+1, n+1)
     void increaseMatrix();
     void addColumns(unsigned numberOfColumns);
+    void addRows(unsigned numberOfRows);
     void removeColumns(unsigned numberOfColumns);
     void insertInBasis(unsigned rowIndex, unsigned indexOfVectorToInsert);
     unsigned getBasisIndexAtRow(unsigned rowIndex);

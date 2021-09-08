@@ -60,6 +60,9 @@ Matrix::~Matrix() {
     matrix.clear();
 }
 
+void Matrix::updateBasis() {
+    basisIndexes = findBasis();
+}
 int Matrix::getRowsCount() {return rows;}
 int Matrix::getColumnsCount() {return columns;}
 
@@ -129,6 +132,14 @@ void Matrix::addColumns(unsigned numberOfColumns) {
         }
     }
     columns += numberOfColumns;
+}
+
+void Matrix::addRows(unsigned numberOfRows) {
+    for (int i = 0; i < numberOfRows; i++) {
+        std::vector<Fraction> vec(columns, Fraction::ZERO);
+        matrix.push_back(vec); //Adding new row
+        rows += 1;
+    }
 }
 
 void Matrix::removeColumns(unsigned numberOfColumns) {
