@@ -43,26 +43,30 @@ Fraction::Fraction(int numerator, int denominator) {
  *
  */
 Fraction::Fraction(float number) {
-    float mantissa;
+    if (number == roundf(number)) { // Checking the integrality
+        this->numerator = static_cast<int>(number);
+        this->denominator = 1;
+    } else {
+        float mantissa;
+        int exponent,
+            numerator,
+            denominator,
+            h;
 
-    int exponent,
-        numerator,
-        denominator,
-        h;
+        // Mantissa of the floating number
+        mantissa = frexp(number , &exponent);
 
-    // Mantissa of the floating number
-    mantissa = frexp(number , &exponent);
+        // E.g. turns 0.123 into 123
+        numerator = this->mantissaToInteger(mantissa, &denominator);
 
-    // E.g. turns 0.123 into 123
-    numerator = this->mantissaToInteger(mantissa, &denominator);
+        h = min(denominator, exponent);
 
-    h = min(denominator, exponent);
+        // Simplify (2^n)/(10^m)
+        this->numerator = numerator * pow(2, exponent - h);
+        this->denominator = pow(5, h) * pow(10, denominator - h);
 
-    // Simplify (2^n)/(10^m)
-    this->numerator = numerator * pow(2, exponent - h);
-    this->denominator = pow(5, h) * pow(10, denominator - h);
-
-    this->simplify();
+        this->simplify();
+    }
 }
 
 const Fraction Fraction::ZERO(0);

@@ -26,7 +26,7 @@ public:
     Matrix();
     Matrix(unsigned rows, unsigned columns);
     Matrix(Matrix &m);
-    Matrix(const std::vector<std::vector<double>> &m);
+    Matrix(const std::vector<std::vector<float>> &m);
     
     //Destructor
     ~Matrix();

@@ -1,12 +1,10 @@
 \Problem name: samp1.lp
 
-Minimize
- x1 + 1.6 x2
+Maximize 
+100 x1 + 115 x2 
 Subject To
- 0.3 x1 + 0.3 x2 >= 150
- 0.1 x1 + 0.2 x2 >= 110
- 0.1 x1 + 0.3 x2 >= 120
- 0.1 x1 + 0.15 x2 >= 100
+0.3 x1 + 0.4 x2 <= 16
+x1 + x2 <= 15
 Bounds
  0 <= X1 <= 4
  2 <= X2 <= 5

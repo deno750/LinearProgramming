@@ -5,5 +5,7 @@
 
 Matrix parseFile(std::string filePath);
 
+Matrix parseFile2(std::string filePath);
+
 
 #endif

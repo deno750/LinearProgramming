@@ -1,7 +1,7 @@
 \Problem name: samp1.lp
 
-Maximize
- 900 x1 + 800 x2 + 700 x3 + 600 x4 - 700 z1 - 500 z2 - 300 z3 + 0 y1 + 0 y2 + 0 y3
+Maximize 
+900 x1 + 800 x2 + 700 x3 + 600 x4 - 700 z1 - 500 z2 - 300 z3 + 0 y1 + 0 y2 + 0 y3
 Subject To
  50 x1 + 50 x2 + 50 x3 + 50 x4 >= 20000
  z1 - 3 y1 <= 0

@@ -5,18 +5,20 @@
 #include <unordered_map>
 #include <vector>
 #include <regex>
+#include <cstdlib>
 
 using namespace std;
 
-inline bool isInteger(const std::string & s)
+
+bool is_number(const std::string& s)
 {
-   if(s.empty() || ((!isdigit(s[0])) && (s[0] != '-') && (s[0] != '+'))) return false;
-
-   char * p;
-   strtol(s.c_str(), &p, 10);
-
-   return (*p == 0);
+    char* end = nullptr;
+    double val = strtod(s.c_str(), &end);
+    return end != s.c_str() && *end == '\0' && val != HUGE_VAL;
 }
+
+
+
 
 void tokenize(std::string const &str, const char delim,
             std::vector<std::string> &out)
@@ -52,7 +54,7 @@ Matrix parseFile(std::string filePath) {
     // Parsing objective function
     std::unordered_map<std::string, int> variables; // Maps the variable name to tableu index
     bool positive = true;
-    int number = 1;
+    float number = 1;
     int index = 1;
 
     std::vector<int> obj;
@@ -83,8 +85,9 @@ Matrix parseFile(std::string filePath) {
                 continue;
             }
 
-            if (isInteger(v)) {
-                number = atoi(v.c_str());
+            if (is_number(v)) {
+                //number = atoi(v.c_str());
+                number = std::stod(v);
             } else {
                 // Variable name
                 variables[v] = index;
@@ -94,7 +97,7 @@ Matrix parseFile(std::string filePath) {
                 if (!minimize) {
                     number = -number;
                 }
-                matrix[0][index] = number;
+                matrix[0][index] = Fraction(number);
                 index++;
 
                 number = 1;
@@ -147,7 +150,7 @@ Matrix parseFile(std::string filePath) {
                     greaterEq = true;
                     for (int i = 0; i < matrix.getColumnsCount(); i++) {
                         //cout << matrix[raw_index][i] << endl;
-                        matrix[raw_index][i] = Fraction((int)-1) * matrix[raw_index][i];
+                        matrix[raw_index][i] =  matrix[raw_index][i] * -1;
                         ///cout << matrix[raw_index][i] << endl;
                     }
                     matrix.addColumns(1);
@@ -157,8 +160,9 @@ Matrix parseFile(std::string filePath) {
                 continue;
             }
 
-            if (isInteger(v)) {
-                number = atoi(v.c_str());
+            if (is_number(v)) {
+                //number = atoi(v.c_str());
+                number = std::stod(v);
                 
                 if (addingRhs) {
                     if (!positive) {
@@ -168,11 +172,11 @@ Matrix parseFile(std::string filePath) {
                         number = -number;
                         greaterEq = false;
                     }
-                    matrix[raw_index][0] = number;
+                    matrix[raw_index][0] = Fraction(number);
                     if (number < 0) {
                         for (int i = 0; i < matrix.getColumnsCount(); i++) {
                             //cout << matrix[raw_index][i] << endl;
-                            matrix[raw_index][i] = Fraction((int)-1) * matrix[raw_index][i];
+                            matrix[raw_index][i] = matrix[raw_index][i] * -1;
                             //cout << matrix[raw_index][i] << endl;
                         }
                     }
@@ -187,7 +191,7 @@ Matrix parseFile(std::string filePath) {
                 int col_idx = variables[v];
                 
                 
-                matrix[raw_index][col_idx] = positive ? number : -number;
+                matrix[raw_index][col_idx] = Fraction(positive ? number : -number);
 
                 // Reinit to defaults
                 positive = true;
@@ -197,6 +201,46 @@ Matrix parseFile(std::string filePath) {
         addingRhs = false;
     }
     matrix.updateBasis(); // Check whetere there is a basis in matrix
-    matrix.visualize();
+    //matrix.visualize();
     return matrix;
+}
+
+Matrix parseFile2(std::string filePath) {
+
+    std::fstream reader(filePath);
+    if (!reader) {
+        cout << "Error with input file" << endl;
+    }
+    std::string in;
+
+    std::regex type_pattern(R"([\s\t]*((Minimize)|(Maximize)|(Min)|(Max))[\s\t]*)", std::regex_constants::icase);
+    std::regex obj_pattern(R"(([\s\t]*[a-zA-Z0-9]*[\s\t]*:)?[\s\t]*[\+\-]?[\s\t]*\d*[\s\t]*[a-zA-Z][a-zA-Z0-9]*[\s\t]*([\+\-][\s\t]*\d*[\s\t]*[a-zA-Z][a-zA-Z0-9]*[\s\t]*)*)", std::regex_constants::icase);
+
+    bool minimize = true;
+    auto i = 0;
+    while (std::getline(reader, in)) {
+        //cout << in << endl;
+        if (regex_match (in, type_pattern )) {
+            cout << "string:literal => matched\n";
+        }
+        std::smatch m;
+        if (regex_match (in, m, obj_pattern )) {
+            cout << "objective => matched\n";
+            std::sregex_token_iterator it{in.begin(), in.end(), obj_pattern, 2};
+            std::vector<std::string> words{it, {}};
+            for (auto str : words) {
+                cout << "Hi: " << str << endl;
+            }
+        }
+            
+        if (i++ == 10) {
+            break;
+        }
+    }
+    
+
+
+
+    Matrix mat;
+    return mat;
 }

@@ -15,75 +15,73 @@
 #include "LIP.hpp"
 #include "ModelParser.hpp"
 
-int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::vector<std::vector<double>> m {
+std::vector<std::vector<float>> m {
         { 0, -15, -25, 0, 0, 0, 0},
         {1000, 1,   2, 1, 0, 0, 0},
         {800,  1,   1, 0, 1, 0, 0},
         {700,  1,   0, 0, 0, 1, 0},
         {400,  0,   1, 0, 0, 0, 1},
     };
-    std::vector<std::vector<double>> m2 {
+    std::vector<std::vector<float>> m2 {
         {-10,  5, -1, 0, -10, 0, 0, 0},
         {  8,  1, -4, 0,   1, 1, 0, 0},
         {  6, -1,  3, 1,   0, 0, 0, 0},
         {  1,  0, -2, 0,   3, 0, 1, 0},
         {  2,  3,  1, 0,  -2, 0, 0, 1},
     };
-    std::vector<std::vector<double>> m3 {
+    std::vector<std::vector<float>> m3 {
         { 0, -3, -5, 0, 0, 0, 0},
         {12,  1,  1, 1, 0, 0, 0},
         {10,  1,  0, 0, 1, 0, 0},
         { 6,  0,  1, 0, 0, 1, 0},
         {16,  1,  2, 0, 0, 0, 1}
     };
-    std::vector<std::vector<double>> m4 {
+    std::vector<std::vector<float>> m4 {
         {0, -3, -1, -3, 0, 0, 0},
         {2,  2,  1,  1, 1, 0, 0},
         {5,  1,  2,  3, 0, 1, 0},
         {6,  2,  2,  1, 0, 0, 1}
     };
-    std::vector<std::vector<double>> m5 {
+    std::vector<std::vector<float>> m5 {
         {-11, -1, -3, -2, -1, 0, 0},
         {  5,  1,  2,  0,  1, 1, 0},
         {  6,  0,  1,  2,  0, 0, 1}
         
     };
-    std::vector<std::vector<double>> m6 {
+    std::vector<std::vector<float>> m6 {
         {-11,  1,  1, -2,  1, 0, 0},
         {  5, -1, -2,  0, -1, 1, 0},
         {  6,  0,  1,  2,  0, 0, 1}
         
     };
-    std::vector<std::vector<double>> m7 {
+    std::vector<std::vector<float>> m7 {
         {-2,  0, -2, -1,  4, 0, 0, 0},
         { 1,  0,  2,  0, -3, 1, 0, 0},
         { 0,  1,  0,  0, -1, 0, 1, 0},
         { 1, -1,  0,  1,  0, 0, 0, 1}
         
     };
-    std::vector<std::vector<double>> m8 {
+    std::vector<std::vector<float>> m8 {
         {0, -3, -5, 0, 0, 0},
         {2,  7, -3, 1, 0, 0},
         {1, -1,  1, 0, 1, 0},
         {3,  1, -3, 0, 0, 1}
         
     };
-    std::vector<std::vector<double>> m9 {
+    std::vector<std::vector<float>> m9 {
         {-6, -5, -3,  4, 0, 0},
         { 1,  2,  1, -3, 1, 0},
         { 5,  3,  2, -1, 0, 1}
         
     };
-    std::vector<std::vector<double>> m10 {
+    std::vector<std::vector<float>> m10 {
         {0, -3, -2, 0, 0},
         {3,  2,  3, 1, 0},
         {4,  3,  2, 0, 1}
         
     };
     
-    std::vector<std::vector<double>> m13 {
+    std::vector<std::vector<float>> m13 {
         { 0, -3, -2, 0, 0, 0},
         {60,  6,  5, 1, 0, 0},
         {11,  1,  1, 0, 1, 0},
@@ -91,21 +89,21 @@ int main(int argc, const char * argv[]) {
         
     };
     
-    std::vector<std::vector<double>> m14 {
+    std::vector<std::vector<float>> m14 {
         { 0,  3,  4,  5, 0, 0},
         {-6, -2, -2, -1, 1, 0},
         {-5, -1, -2, -3, 0, 1}
         
     };
     
-    std::vector<std::vector<double>> m15 {
+    std::vector<std::vector<float>> m15 {
         { 0,  3,  4,  5, 0, 0},
         {-6, -2, -2, -1, 1, 0},
         {-5, -1, -2, -3, 0, 1}
         
     };
     
-    std::vector<std::vector<double>> m16 {
+    std::vector<std::vector<float>> m16 {
         {  0, 0,  0,  0,   4,  3,  1, 0},
         { -1, 0,  1,  0,  -5,  1,  3, 0},
         { -5, 1,  0,  0,  -1,  0,  4, 0},
@@ -115,7 +113,7 @@ int main(int argc, const char * argv[]) {
     };
     
     //9-13
-    std::vector<std::vector<double>> m17 {
+    std::vector<std::vector<float>> m17 {
         {0, -3, -2, 0, 0},
         {3,  2,  3, 1, 0},
         {4,  3,  2, 0, 1},
@@ -123,7 +121,7 @@ int main(int argc, const char * argv[]) {
     };
     
     //9-14
-    std::vector<std::vector<double>> m20 {
+    std::vector<std::vector<float>> m20 {
         {0, -4, -5, 0, 0, 0},
         {8,  2,  2, 1, 0, 0},
         {7,  1,  3, 0, 1, 0},
@@ -131,7 +129,7 @@ int main(int argc, const char * argv[]) {
     };
     
     //9-15
-    std::vector<std::vector<double>> m19 {
+    std::vector<std::vector<float>> m19 {
         {0, -3, -2, 0, 0, 0},
         {7,  2,  1, 1, 0, 0},
         {8,  3,  2, 0, 1, 0},
@@ -139,7 +137,7 @@ int main(int argc, const char * argv[]) {
     };
     
     //9-16
-    std::vector<std::vector<double>> m18 {
+    std::vector<std::vector<float>> m18 {
         {0, -2, -1, 0, 0},
         {0,  3,  -2, 1, 0},
         {6,  1,  2, 0, 1},
@@ -147,59 +145,59 @@ int main(int argc, const char * argv[]) {
     };
     
     //9-17
-    std::vector<std::vector<double>> m21 {
+    std::vector<std::vector<float>> m21 {
         {0, -1,  -1, 0, 0},
         {6,  3,  -2, 1, 0},
         {2,  0,   1, 0, 1},
     };
     
     //9-18
-    std::vector<std::vector<double>> m22 {
+    std::vector<std::vector<float>> m22 {
         {0,  -4,  -5, 0, 0},
         {10,  3,   2, 1, 0},
         {11,  1,   4, 0, 1},
     };
     
     //9-19
-    std::vector<std::vector<double>> m23 {
+    std::vector<std::vector<float>> m23 {
         {0,  -5,  -2, 0, 0},
         {9,   2,   2, 1, 0},
         {11,  3,   1, 0, 1},
     };
     
     //9-20
-    std::vector<std::vector<double>> m24 {
+    std::vector<std::vector<float>> m24 {
         { 0,  -1,   0, 0, 0},
         { 1,   2,   2, 1, 0},
         {-1,  -4,   1, 0, 1},
     };
     
-    std::vector<std::vector<double>> m25 {
+    std::vector<std::vector<float>> m25 {
         { -1,  2,  2, -1, -1, 0},
         {  1,  1,  1,  0,  0, 1},
         {  0, -1,  0,  1,  0, 0},
         {  0,  0, -1,  0,  1, 0},
     };
     
-    std::vector<std::vector<double>> m27 {
+    std::vector<std::vector<float>> m27 {
         {   0, -5,  -4,  0,  0,  1},
         {  78,  3,   5,  1,  0,  0},
         {  36,  4,   1,  0,  1,  0},
     };
     
-    std::vector<std::vector<double>> m28 {
+    std::vector<std::vector<float>> m28 {
         {  0, -1,  -4,  0,  0},
         {  7,  1,   1,  1,  0},
         {  3, -1,   3,  0,  1},
     };
     
-    std::vector<std::vector<double>> m29 {
+    std::vector<std::vector<float>> m29 {
         {  0, -6,  -8,  0,  0},
         { 36,  2,   4,  1,  0},
         { 40,  3,  -4,  0,  1},
     };
     
-    std::vector<std::vector<double>> m30 {
+    std::vector<std::vector<float>> m30 {
         {  0, -5,  -5,  -3,  0, 0, 0, 0},
         {  3,  1,   3,   1,  1, 0, 0, 0},
         {  2, -1,   0,   3,  0, 1, 0, 0},
@@ -207,7 +205,7 @@ int main(int argc, const char * argv[]) {
         {  2,  2,   3,  -1,  0, 0, 0, 1},
     };
     
-    std::vector<std::vector<double>> m31 {
+    std::vector<std::vector<float>> m31 {
         {  -10, 5,  -1,  0,  -10, 0, 0, 0},
         {   8,  1,   4,  0,    1, 1, 0, 0},
         {   6, -1,   3,  1,    0, 0, 0, 0},
@@ -215,40 +213,40 @@ int main(int argc, const char * argv[]) {
         {   2,  3,   1,  0,   -2, 0, 0, 1},
     };
     
-    std::vector<std::vector<double>> m32 {
+    std::vector<std::vector<float>> m32 {
         {  0, -2,  -1,  0,  0, 0},
         {  4,  1,  -1,  1,  0, 0},
         { 12,  3,  -1,  0,  1, 0},
         { 12,  1,   1,  0,  0, 1},
     };
     
-    std::vector<std::vector<double>> m33 {
+    std::vector<std::vector<float>> m33 {
         {  0, -6,  -8},
         { 36,  2,   4},
         { 40,  3,  -4},
     };
     
-    std::vector<std::vector<double>> m34 {
+    std::vector<std::vector<float>> m34 {
         {  0,  1,   0, 1, 0},
         {  5,  1,   2, 0, 1},
         {  6,  0,   1, 2, 0},
     };
     
-    std::vector<std::vector<double>> m35 {
+    std::vector<std::vector<float>> m35 {
         {  0,  1,   0, 1, 0},
         {  5, -1,  -2, 0,-1},
         {  6,  0,   1, 2, 0},
     };
     
     //9-4
-    std::vector<std::vector<double>> m36 {
+    std::vector<std::vector<float>> m36 {
         {  0,  1,  -2, 0},
         {  1,  2,   0, 3},
         {  5,  3,   2,-1},
     };
     
     //9-5
-    std::vector<std::vector<double>> m37 {
+    std::vector<std::vector<float>> m37 {
         {  0,  1,  1, 2,  4},
         {  1,  0,  2, 0, -3},
         {  0,  1,  0, 0, -1},
@@ -256,19 +254,19 @@ int main(int argc, const char * argv[]) {
     };
     
     //9-7
-    std::vector<std::vector<double>> m38 {
+    std::vector<std::vector<float>> m38 {
         {  0,  1, -2,  0},
         {  1,  2,  1, -3},
         {  5,  3,  2, -1},
     };
     
-    std::vector<std::vector<double>> m39 {
+    std::vector<std::vector<float>> m39 {
         {  0,  1,  1, 10},
         {  2,  0,  1,  4},
         {  2, -2,  1, -6},
     };
     
-    std::vector<std::vector<double>> m40 {
+    std::vector<std::vector<float>> m40 {
         {  -5,  0,   6,  0,   10, 0,  5, 0},
         { -10,  0,   8,  0,    3, 1,  7, 0},
         {  -5,  0,  -1,  1,   -2, 0, -1, 0},
@@ -276,13 +274,13 @@ int main(int argc, const char * argv[]) {
         {  -1,  0,   3,  0,    6, 0, -2, 1},
     };
     
-    std::vector<std::vector<double>> m41 {
+    std::vector<std::vector<float>> m41 {
         {    0,  -3,  -5,  0, 0},
         {  800,   1,   2,  1, 0},
         {  600,   1,   1,  0, 1},
     };
     
-    std::vector<std::vector<double>> m42 {
+    std::vector<std::vector<float>> m42 {
         {    0,   0,  -1,  0, 0, 0, 0},
         {    6,   3,   2,  1, 0, 0, 0},
         {    0,  -3,   2,  0, 1, 0, 0},
@@ -290,7 +288,7 @@ int main(int argc, const char * argv[]) {
         {    0,  -1,   1,  0, 0, 0, 1},
     };
     
-    std::vector<std::vector<double>> m43 {
+    std::vector<std::vector<float>> m43 {
         {    0,   1,  2,  1,3, 6, 2, 3},
         {    1,   1,   0,  0, 0, 0, 0, 1},
         {    0,  -1,   1,  0,-1, 1, 0, 0},
@@ -300,14 +298,14 @@ int main(int argc, const char * argv[]) {
         {   -1,   0,   0,  0, 0,-1,-1, 0},
     };
     
-    std::vector<std::vector<double>> m44 {
+    std::vector<std::vector<float>> m44 {
         {    0,   3,  -1,  4},
         {    1,   1,   0,  0},
         {    0,  -1,   1,  1},
         {   -1,   0,   0, -1},
     };
     
-    std::vector<std::vector<double>> m45 {
+    std::vector<std::vector<float>> m45 {
         {    0,  -2,  -4,  -3, -4, -5, 0, 0, 0, 0, 0, 0},
         {   10,   3,   1,   4,  6,  7, 1, 0, 0, 0, 0, 0},
         {    1,   1,   0,   0,  0,  0, 0, 1, 0, 0, 0, 0},
@@ -317,7 +315,7 @@ int main(int argc, const char * argv[]) {
         {    1,   0,   0,   0,  0,  1, 0, 0, 0, 0, 0, 1},
     };
     
-    std::vector<std::vector<double>> m46 {
+    std::vector<std::vector<float>> m46 {
         {    0,  -900,  -600,  -300, -10000, -5000, -2000, 0, 0, 0, 0, 0, 0, 0},
         {  150,     1,     1,     1,     10,    10,   10,  1, 0, 0, 0, 0, 0, 0},
         {   10,     1,     0,     0,      0,     0,    0,  0, 1, 0, 0, 0, 0, 0},
@@ -328,27 +326,36 @@ int main(int argc, const char * argv[]) {
         {    5,     0,     0,     0,      0,     0,    1,  0, 0, 0, 0, 0, 0, 1},
     };
     
-    std::vector<std::vector<double>> m47 {
+    std::vector<std::vector<float>> m47 {
         {    0,   -3,  -5,  0, 0, 0},
         {    2,    7,  -3,  1, 0, 0},
         {    1,   -1,   1,  0, 1, 0},
         {    3,    1,  -3,  0, 0, 1},
     };
     
-    std::vector<std::vector<double>> m48 {
+    std::vector<std::vector<float>> m48 {
         {    0,    1,   2,  0, 0, 0},
         {    4,    1,   1,  1, 0, 0},
         {   -6,    -1, -4,  0, 1, 0},
         {   -3,   -8,   8,  0, 0, 1},
     };
     
-    std::vector<std::vector<double>> m49 {
+    std::vector<std::vector<float>> m49 {
         {    0,   -3,  -5,  0, 0, 0},
         {    2,    7,  -3,  1, 0, 0},
         {    1,   -1,   1,  0, 1, 0},
         {    3,    1,  -3,  0, 0, 1},
     };
 
+
+
+
+
+
+
+
+
+int main(int argc, const char * argv[]) {
     Matrix mat;
     if (argc < 2) {
         cout << "Missing file path" << endl;
@@ -356,15 +363,16 @@ int main(int argc, const char * argv[]) {
     } else {
         mat = parseFile(argv[1]);
     }
+    //mat = parseFile2("../model/model8.lp");
     
     
-    //Matrix mat(m46);
-    //mat.visualize();
+    //Matrix mat(m);
+    mat.visualize();
     Simplex simplex;
-    simplex.solve(mat);
+    //simplex.solve(mat);
     LIP lip;
     bool useBranchAndBound = false;
-    //lip.solve(mat, useBranchAndBound);
+    lip.solve(mat, useBranchAndBound);
     
     
     return 0;

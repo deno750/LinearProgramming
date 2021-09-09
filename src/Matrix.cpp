@@ -32,7 +32,7 @@ Matrix::Matrix(Matrix &m) {
     basisIndexes = findBasis();
 }
 
-Matrix::Matrix(const std::vector<std::vector<double>> &m) {
+Matrix::Matrix(const std::vector<std::vector<float>> &m) {
     unsigned columnSize = 0;
     if(m.size() > 0) {
         columnSize = (unsigned) m[0].size();
@@ -48,7 +48,8 @@ Matrix::Matrix(const std::vector<std::vector<double>> &m) {
     for (unsigned i = 0; i < this->rows; ++i) {
         std::vector<Fraction> row;
         for (unsigned j = 0; j < this->columns; ++j) {
-            row.push_back(Fraction((int) m[i][j]));
+            float num = m[i][j];
+            row.push_back(Fraction(num));
         }
         this->matrix.push_back(row);
     }
